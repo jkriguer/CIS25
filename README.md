@@ -1,2 +1,2 @@
 # CIS25 Spring 2025
-coming soon
+Repo with all work done for CIS25
