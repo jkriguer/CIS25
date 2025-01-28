@@ -1,40 +1,61 @@
 #include <iostream>
+#include <iomanip>
 #include <cstdlib>
 #include <string>
 
 using namespace std;
 
 string getCard() { //picks a card of any suit from 1 to 6
-	string output;
-	short roll = rand() % 6;
-	if (roll == 0)
-		output = "Ace";
-	else
-		output = to_string(roll + 1);
+	string rank, suit;
+	short roll = rand() % 13;
+	switch (roll) {
+		case 0:
+			rank = "Ace";
+			break;
+		case 12:
+			rank = "King";
+			break;
+		case 11:
+			rank = "Queen";
+			break;
+		case 10:
+			rank = "Jack";
+			break;
+		default:
+			rank = to_string(roll + 1);
+			break;
+	}
 	roll = rand() % 4;
 	switch (roll) {
 		case 0:
-			output += " of Spades";
+			suit = "Spades";
 			break;
 		case 1:
-			output += " of Clubs";
+			suit = "Clubs";
 			break;
 		case 2:
-			output += " of Hearts";
+			suit += "Hearts";
 			break;
 		case 3:
-			output += " of Diamonds";
+			suit = "Diamonds";
 			break;
 	}
-	return output;
+	return rank + " of " + suit;
+}
+
+void printCard(int width, string card) {
+	cout << string(width, '*') << "\n\n"; //top border
+	cout << setw(width) << internal << card << '\n';
+	cout << '\n' << string(width, '*') << '\n';
 }
 
 int main() {
+	const int MAX_WIDTH = 40; //must be 40 for final submission
 	long seed = time(nullptr);
 	srand(seed);
 
-	for (int i = 0; i < 10; i++)
-		cout << "Card " << i + 1 << ": " << getCard() << '\n';
+	for (int i = 0; i < 2; i++)
+		printCard(MAX_WIDTH, getCard());
 }
 
 /*
