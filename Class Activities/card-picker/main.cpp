@@ -50,8 +50,8 @@ void printCard(int width, int player, string card) {
 	else
 		cardOwner += to_string(player);
 	cout << string(width, '*') << "\n\n"; //top border
-	cout << setw(width / 2) << left << cardOwner + "'s card:";
-	cout << setw((width % 2 == 0) ? width / 2 : width / 2 + 1) << right << card << '\n';
+	cout << setw(width / 2) << setfill('-') << left << cardOwner + "'s card ";
+	cout << setw((width % 2 == 0) ? width / 2 : width / 2 + 1) << right << ' ' + card << '\n';
 	cout << '\n' << string(width, '*') << '\n';
 }
 
@@ -60,11 +60,15 @@ int main() {
 	long seed = time(nullptr);
 	srand(seed);
 
-	for (int i = 0; i < 1; i++)
-		printCard(MAX_WIDTH, (rand() % 4), getCard());
+	printCard(MAX_WIDTH, (rand() % 4), getCard());
 }
 
 /*
 * OUTPUT
+****************************************
+
+Player 2's card ------------ 3 of Hearts
+
+****************************************
 
 */
