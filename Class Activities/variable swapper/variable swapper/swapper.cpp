@@ -1,5 +1,4 @@
 // swapper.cpp: this program swaps two variables for git demonstration
-// Jasper Kriguer 10886327
 
 #include <iostream>
 
