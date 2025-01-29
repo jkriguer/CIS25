@@ -1,2 +1,2 @@
-# card picker
-this program contains a function to pick a card from ace to 6 of any suit, and a helper function to demonstrate it
+# Card Picker
+This program contains a function to pick a playing card from a deck, as well as displaying which player it belongs to.
