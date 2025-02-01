@@ -1,4 +1,3 @@
-# Simple Calculator
+﻿# Simple Calculator
 This program contains a function that can do some basic arithmetic using user input.
-
-Solution (.sln) file is optional, I use it for working on multiple machines.
+> ⚠️ **Warning:** This repo contains VS22 project/solution files for my ease of development across devices. This may cause conflicts if opened in another IDE.

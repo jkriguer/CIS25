@@ -1,6 +1,3 @@
-# Table Printing iomanip demo
-
+﻿# Table Printing iomanip demo
 This program contains a simple program used to demonstrate the iomanip formatting tools. It features a class designed to hold the requisite data types for the assignment's specification.
-
-Solution (.sln) file is optional, I use it for working on multiple machines.
-
+> ⚠️ **Warning:** This repo contains VS22 project/solution files for my ease of development across devices. This may cause conflicts if opened in another IDE.

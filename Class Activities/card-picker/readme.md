@@ -1,4 +1,3 @@
-# Card Picker
+﻿# Card Picker
 This program contains a function to pick a playing card from a deck, as well as displaying which player it belongs to.
-
-Solution (.sln) file is optional, I use it for working on multiple machines.
+> ⚠️ **Warning:** This repo contains VS22 project/solution files for my ease of development across devices. This may cause conflicts if opened in another IDE.
