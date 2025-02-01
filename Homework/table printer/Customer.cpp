@@ -56,7 +56,6 @@ int Customer::getID() {
 	return customerID;
 }
 
-void print() {
-	return; //TODO
-
+void Customer::print() { //placeholder, use other func with pointers
+	return;
 }
