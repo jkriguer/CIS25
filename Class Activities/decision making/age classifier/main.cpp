@@ -9,9 +9,9 @@ int main() {
 
 	if (age < 12)
 		cout << "Child\n";
-	else if (age < 19)
+	else if (age <= 19)
 		cout << "Teen\n";
-	else if (age < 64)
+	else if (age <= 64)
 		cout << "Adult\n";
 	else
 		cout << "Senior\n";
@@ -22,5 +22,9 @@ int main() {
 * OUTPUT
 Enter your age in years: 34
 Adult
+
+* OUTPUT
+Enter your age in years: 19
+Teen
 
 */
