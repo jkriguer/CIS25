@@ -30,10 +30,19 @@ int main() {
 				repeat = false;
 				break;
 			default:
-				cout << '"' << operation << "\" is not recognized. Please enter a valid operation. ";
+				cout << '"' << operation << "\" is not recognized. ";
 		}
 	}
 
 
 	return 0;
 }
+
+/*
+* OUTPUT
+Enter both operands: 64 8
+Enter the operation to perform: (+ - * /): k
+"k" is not recognized. Enter the operation to perform: (+ - * /): /
+8
+
+*/
