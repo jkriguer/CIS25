@@ -8,7 +8,7 @@ using namespace std;
 string getCard() { //picks a random card
 	string rank, suit;
 	short roll = rand() % 52;
-	switch (roll%13) {
+	switch (roll % 13) {
 		case 0:
 			rank = "Ace";
 			break;
@@ -25,7 +25,7 @@ string getCard() { //picks a random card
 			rank = to_string((roll % 13) + 1);
 			break;
 	}
-	switch (roll/13) {
+	switch (roll / 13) {
 		case 0:
 			suit = "Spades";
 			break;
