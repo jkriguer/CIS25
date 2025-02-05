@@ -1,5 +1,3 @@
-# Age Classifier
+﻿# Age Classifier
 A simple program to classify people by age.
-
-Solution (.sln) file is optional, I use it for working on multiple machines.
-
+> ⚠️ **Warning:** This repo contains VS22 project/solution files for my ease of development across devices. This may cause conflicts if opened in an incompatible IDE. Verify compatability before editing.
