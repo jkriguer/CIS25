@@ -136,6 +136,9 @@
   <ItemGroup>
     <ClInclude Include="Secret.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="wordlist.txt" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
