@@ -1,24 +1,28 @@
 #pragma once
 #include <string>
 #include <vector>
+#include <iostream>
 
 using std::string;
-using std::vector;
 
 class Secret {
 private:
 	string wordTarget;
 	string wordDisplay;
 	int lives;
-	vector<char> guessedLetters;
+	std::vector<char> guessedLetters;
+	string lifeDisplay(int);
 public:
 	Secret();
-	Secret(vector<string>);
+	Secret(std::vector<string>);
 	int getLives();
-	int guess(char);
+	bool guess(char);
+	bool isGuessedLetter(char);
 	void setWord(string);
 	void setLives(int);
 	void modLives(int);
 	string getWord(bool = true);
+	void print();
+	int getLetterQty(char);
 };
 

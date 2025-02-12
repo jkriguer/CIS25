@@ -4,45 +4,36 @@
 #include <fstream>
 #include "Secret.h"
 
-using std::cout;
-using std::cin;
-
-int checkChar(string, char);
-void printBoard(string);
-int createWordList(vector<string>);
+int createWordList(std::vector<string>&);
 
 int main() {
-	vector<string> words;
-	if (createWordList(words) == -1) { //terminate if wordlist couldn't be opened
+	using std::cout;
+	using std::cin;
+
+	std::vector<string> words;
+	if (createWordList(words) == -1) { //terminate if wordlist.txt is inaccessible
+		cout << "Error: wordlist file couldn't be accessed.\n";
 		return -1;
 	}
-	if (words.size() == 0) { //terminate if wordlist was empty or couldn't be read
+	if (words.size() == 0) { //terminate if wordlist opened but had no contents
+		cout << "Error: wordlist file was empty.\n";
 		return -2;
 	}
-	for (string str : words) //debug print wordlist
-		cout << str << ' ';
 	srand((unsigned)time(nullptr));
-	/*Secret word(words);
-	cout << word.getWord() << '\n';
+
+
+	Secret game(words);
+	cout << game.getWord() << '\n';
 	for (char ch = 'a'; ch <= 'z'; ch++) {
-		if (checkChar(word.getWord(), ch) > 0) {
-			cout << ch << checkChar(word.getWord(), ch) << ' ';
+		if (game.guess) > 0) {
+			cout << ch << checkChar(game.getWord(), ch) << ' ';
 		}
-	}*/
+	}
+
 	return 0;
 }
 
-int checkChar(string word, char input) { //rename, returns number of correct chars
-	int numberCorrect = 0;
-	for (char ch : word) {
-		if (ch == input) {
-			numberCorrect++;
-		}
-	}
-	return numberCorrect;
-}
-
-int createWordList(vector<string> vec) { //generate word list vector from file
+int createWordList(std::vector<string>& vec) { //generate word list vector from file
 	std::ifstream inputFile;
 	string inputWord;
 	inputFile.open("wordlist.txt"); //file handle opened
@@ -50,7 +41,6 @@ int createWordList(vector<string> vec) { //generate word list vector from file
 		return -1;
 	}
 	while (std::getline(inputFile, inputWord)) {
-		inputFile >> inputWord;
 		vec.push_back(inputWord);
 	}
 	inputFile.close(); //file handle closed
