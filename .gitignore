@@ -363,7 +363,8 @@ MigrationBackup/
 FodyWeavers.xsd
 
 # Manually added
-# *.sln
-#.vcxproj
-#.vcxproj.filters
+.gitignore
+*.sln
+.vcxproj
+.vcxproj.filters
 demonstration/
