@@ -365,6 +365,6 @@ FodyWeavers.xsd
 # Manually added
 .gitignore
 *.sln
-.vcxproj
-.vcxproj.filters
+*.vcxproj
+*.vcxproj.filters
 demonstration/
