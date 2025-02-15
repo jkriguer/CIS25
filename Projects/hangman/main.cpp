@@ -36,7 +36,9 @@ int main() {
 			message = "That wasn't right.";
 		}
 	}
-	drawBoard(lives, message, words, guessedLetters);//display final board
-
+	drawBoard(lives, ((lives == 0) ? "Good try!" : "Well done!"), words, guessedLetters);//display final board
+	cout << "Game over!\n";
+	cout << ((lives == 0) ? "The solution was \"" + words + "\"" : "You guessed all the words!") << '\n';
+	cout << "You made " << guessedLetters.size() << " guesses.\n";
 	return 0;
 }
