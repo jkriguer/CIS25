@@ -90,7 +90,7 @@ void drawBoard(int lives, std::string message, std::string words, std::vector<ch
 				break;
 			case 5://print guessed letters
 				if (guessed.size() > 0) {
-					sortVecChars(guessed);
+					//sortVecChars(guessed);
 					cout << "Already guessed letters: " << listChars(guessed);
 				}
 				break;
