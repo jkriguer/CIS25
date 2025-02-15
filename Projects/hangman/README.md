@@ -1,15 +1,26 @@
 ﻿# Hangman
-This program is a simple word game where the user guesses letters to determine a hidden word.<br>
+  ```
+    .========.     _  _                                      
+    || /     |    | || | __ _  _ _   __ _  _ __   __ _  _ _  
+    ||/     _|_   | __ |/ _` || ' \ / _` || '  \ / _` || ' \ 
+    ||     (x_x)  |_||_|\__,_||_||_|\__, ||_|_|_|\__,_||_||_|
+    ||     /| |\                    |___/                    
+    ||    ^ |_| ^
+  ========= / \ ====
+  ||              ||
+```
 
-> It must be named *wordlist.txt* and contain a list of possible words to guess separated by linebreaks.
-In testing, I used [this list from Wordle](https://gist.github.com/scholtes/94f3c0303ba6a7768b47583aff36654d#file-wordle-la-txt).
-You can either download the file and rename it as needed or paste its contents into the blank wordlist file cloned from this repo.
+This program is a simple word game where the user guesses letters to determine a hidden phrase.<br>
+
+[Video presentation of program and code](TODO)
 
 How to play:
-* TODO
-* TODO AGAIN
-* TODO ALSO
-* TOMAYBEDO
+1. Two random words will be randomly chosen for you to guess.
+2. Try guessing letters to fill in the blanks.
+3. Only letters will be accepted as input. If you try to enter more than one character, only the first will be processed.
+4. Get a letter wrong, and the hanged man will be drawn (you'll lose lives).
+5. Guess all the letters and you win!
+6. Run out of lives before you guess all the letters and it's game over.
 
 Error Codes:<br>
 * <b>-10</b>: There was no word list file present. Please make sure that there is a file called "wordlist.txt" in the directory you run this program.
