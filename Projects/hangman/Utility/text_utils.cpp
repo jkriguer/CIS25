@@ -41,3 +41,23 @@ std::string toLower(std::string str) {
 void clear() {
 	printf("\033c"); //better than using defs to decide to system(clear)/system(cls)
 }
+
+std::string listChars(std::vector<char> vec) {
+	std::string output = "";
+	for (int i = 0; i < vec.size(); i++) {
+		output += vec.at(i);
+		if (i < vec.size() - 1) {
+			output += ' ';
+		}
+	}
+	return output;
+}
+
+bool charInString(char in, std::string str) {
+	for (char ch : str) {
+		if (ch == in) {
+			return true;
+		}
+	}
+	return false;
+}

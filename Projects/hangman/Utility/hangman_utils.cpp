@@ -27,22 +27,6 @@ int populateWordList(std::vector<std::string>& vec) { //generate word list vecto
 	return 0;
 }
 
-std::string lifeDisplay(int lives) {
-	std::string asciiArt[]{                                                   //   0      1      2      3      4      5      6
-		".----.\n.|..|.\n.|..O.\n.|./|\\\n.|./.\\\n.|....\n.|....\n======\n", // .----. .----. .----. .----. .----. .----. .----.
-		".----.\n.|..|.\n.|..O.\n.|./|\\\n.|...\\\n.|....\n.|....\n======\n", // .|..|. .|..|. .|..|. .|..|. .|..|. .|..|. .|..|.
-		".----.\n.|..|.\n.|..O.\n.|./|\\\n.|....\n.|....\n.|....\n======\n",  // .|..O. .|..O. .|..O. .|..O. .|..O. .|..O. .|....
-		".----.\n.|..|.\n.|..O.\n.|..|\\\n.|....\n.|....\n.|....\n======\n",  // .|./|\ .|./|\ .|./|\ .|..|\ .|..|. .|.... .|....
-		".----.\n.|..|.\n.|..O.\n.|..|.\n.|....\n.|....\n.|....\n======\n",   // .|./.\ .|...\ .|.... .|.... .|.... .|.... .|....
-		".----.\n.|..|.\n.|..O.\n.|....\n.|....\n.|....\n.|....\n======\n",   // .|.... .|.... .|.... .|.... .|.... .|.... .|....
-		".----.\n.|..|.\n.|....\n.|....\n.|....\n.|....\n.|....\n======\n"    // .|.... .|.... .|.... .|.... .|.... .|.... .|....
-	};
-	if (lives > 6 || lives < 0) { //clamp if lives out of array bounds
-		return ((lives > 6) ? asciiArt[6] : asciiArt[0]);
-	}
-	return asciiArt[lives];
-}
-
 void sortVecChars(std::vector<char>& vec) {
 	for (int i = 1; i < vec.size(); i++) { //hooray for merge sort!
 		char ch = vec.at(i);
@@ -78,8 +62,8 @@ bool charInVec(char ch, std::vector<char> vec) {
 std::string displayWords(std::string words, std::vector<char> guessed) {
 	std::string output = "";
 	for (int i = 0; i < words.length(); i++) {
-		if (words[i] == ' ') { //linebreak on space between words
-			output += '\n';
+		if (words[i] == ' ') { //larger space on space between words
+			output += "   ";
 		}
 		else if (charInVec(words[i], guessed)) { //print letter if guessed
 			output += words[i];
@@ -91,12 +75,31 @@ std::string displayWords(std::string words, std::vector<char> guessed) {
 	return output;
 }
 
-void drawBoard(int lives, std::string words, std::vector<char> guessed) {
+void drawBoard(int lives, std::string message, std::string words, std::vector<char> guessed) {
 	using std::cout;
 
 	clear(); //clear terminal
-	cout << lifeDisplay(lives) << '\n'; //ascii art of hangman
-	cout << displayWords(words, guessed) << '\n'; //show guessed letters
+	for (int i = 0; i <= 7; i++) {
+		cout << std::setw(30) << std::left << pictogram(i, lives);
+		switch (i) {//individual line behaviors
+			case 1://print feedback to user
+				cout << message;
+				break;
+			case 3://print guess progress
+				cout << displayWords(words, guessed);
+				break;
+			case 5://print guessed letters
+				if (guessed.size() > 0) {
+					sortVecChars(guessed);
+					cout << "Already guessed letters: " << listChars(guessed);
+				}
+				break;
+			case 7://print lives remaining (maybe)
+				cout << "Lives remaining: " << lives - 1;
+		}
+		cout << '\n';
+	}
+	cout << "\n\n";
 }
 
 std::string pickFromVec(std::vector<std::string> vec, int numWords) {
@@ -111,4 +114,63 @@ std::string pickFromVec(std::vector<std::string> vec, int numWords) {
 		}
 	}
 	return output;
+}
+
+char getValidLetter(std::vector<char> guessed) {
+	using std::cout;
+	std::string input;
+	while (true) {
+		cout << "Enter a letter: ";
+		std::getline(std::cin, input);
+		if (!input.empty()) { //check if input was provided
+			if (isAlpha(input[0])) {
+				//cout << "Input: " << toLower(input[0]);
+				if (charInVec(input[0], guessed)) {
+					cout << "You already entered " << toLower(input[0]) << "!\n";
+					continue;
+				}
+				return toLower(input[0]);
+			}
+		}
+		cout << "That wasn't valid. ";
+	}
+}
+
+int lettersLeftToGuess(std::string words, std::vector<char> guessed) {
+	std::vector<char> unique;
+	for (char ch : words) { //make a vec of all unique letters in str
+		if (isAlpha(ch) && !charInVec(ch, unique)){
+			unique.push_back(ch);
+		}
+	}
+	int correctLetters = 0;
+	for (int i = 0; i < unique.size(); i++) {
+		for (int j = 0; j < guessed.size(); j++) {
+			if (unique.at(i) == guessed.at(j)) {
+				correctLetters++;
+				break;
+			}
+		}
+	}
+	return unique.size() - correctLetters;
+}
+
+std::string pictogram(int line, int lives) { //just trust me that it works. it could theoretically be deduped but...
+	if (lives > 7 || lives < 0) { 
+		lives = (lives < 0) ? 0 : 7; //clamp if either var is out of bounds
+	}
+	if (line > 7 || line < 0) {
+		line = (line < 0) ? 0 : 7;
+	}
+	std::string ascii[] { //horrific ascii art blob, genuinely inscrutable
+		"  .========.", "  || /", "  ||/", "  ||", "  ||", "  ||", "=========-----====", "||              ||", 
+		"  .========.", "  || /    _|_", "  ||/    (o_o)", "  ||", "  ||", "  ||", "=========-----====", "||              ||", 
+		"  .========.", "  || /    _|_", "  ||/    (o_o)", "  ||      | |", "  ||      |_|", "  ||", "=========-----====", "||              ||", 
+		"  .========.", "  || /    _|_", "  ||/    (o_o)", "  ||     /| |", "  ||    ^ |_|", "  ||", "=========-----====", "||              ||", 
+		"  .========.", "  || /    _|_", "  ||/    (o_o)", "  ||     /| |\\", "  ||    ^ |_| ^", "  ||", "=========-----====", "||              ||", 
+		"  .========.", "  || /    _|_", "  ||/    (o_o)", "  ||     /| |\\", "  ||    ^ |_| ^", "  ||      /", "=========-----====", "||              ||", 
+		"  .========.", "  || /    _|_", "  ||/    (o_o)", "  ||     /| |\\", "  ||    ^ |_| ^", "  ||      / \\", "=========-----====", "||              ||", 
+		"  .========.", "  || /     |", "  ||/     _|_", "  ||     (x_x)", "  ||     /| |\\", "  ||    ^ |_| ^", "========= / \\ ====", "||              ||"
+	};
+	return ascii[((7 - lives) * 8) + line];
 }

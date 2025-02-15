@@ -2,47 +2,41 @@
 #include <string>
 #include <vector>
 #include <fstream>
-#include "Secret.h"
-
-int createWordList(std::vector<string>&);
+#include "Utility/text_utils.h"
+#include "Utility/hangman_utils.h"
 
 int main() {
-	using std::cout;
-	using std::cin;
+	using std::cout, std::string, std::vector;
 
-	std::vector<string> words;
-	if (createWordList(words) == -1) { //terminate if wordlist.txt is inaccessible
-		cout << "Error: wordlist file couldn't be accessed.\n";
-		return -1;
+	const int NUM_WORDS = 3; //2 words will be selected
+	vector<string> wordList;
+	int errorLevel = populateWordList(wordList); //initialize wordlist from file
+	if (errorLevel != 0) { //terminate early if there were problems generating wordlist
+		cout << "Error " << errorLevel << ", check the README for more information.\n";
+		return errorLevel;
 	}
-	if (words.size() == 0) { //terminate if wordlist opened but had no contents
-		cout << "Error: wordlist file was empty.\n";
-		return -2;
-	}
-	srand((unsigned)time(nullptr));
-
-
-	Secret game(words);
-	cout << game.getWord() << '\n';
-	for (char ch = 'a'; ch <= 'z'; ch++) {
-		if (game.guess) > 0) {
-			cout << ch << checkChar(game.getWord(), ch) << ' ';
+	//prepare vars
+	string words = pickFromVec(wordList, NUM_WORDS); //select word(s) from list
+	string message = "Welcome! Guess a letter.";
+	wordList.clear(); //wordlist can be freed to save memory
+	int lives = 7;
+	vector<char> guessedLetters;
+	cout << "Debug: " << words << '\n';
+	system("pause");
+	//game start
+	while (lives > 0 && lettersLeftToGuess(words, guessedLetters) > 0) { //run until word is guessed or man is hanged
+		drawBoard(lives, message, words, guessedLetters); //draw game state
+		char input = getValidLetter(guessedLetters); //get user input, trunc string if needed
+		guessedLetters.push_back(input); //store newly guessed letter
+		if (charInString(input, words)) { //guess was correct
+			message = "Good guess!";
+		}
+		else {
+			lives--;
+			message = "That wasn't right.";
 		}
 	}
+	drawBoard(lives, message, words, guessedLetters);//display final board
 
-	return 0;
-}
-
-int createWordList(std::vector<string>& vec) { //generate word list vector from file
-	std::ifstream inputFile;
-	string inputWord;
-	inputFile.open("wordlist.txt"); //file handle opened
-	if (!inputFile.is_open()) { //error if file can't be opened
-		return -1;
-	}
-	while (std::getline(inputFile, inputWord)) {
-		vec.push_back(inputWord);
-	}
-	inputFile.close(); //file handle closed
 	return 0;
 }
