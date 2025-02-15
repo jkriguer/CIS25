@@ -1,10 +1,14 @@
+#ifndef TEXT_UTILS_H
+#define TEXT_UTILS_H
+
 #include <string>
 
-namespace hangman_utils {
-	bool isAlpha(char);
-	bool isAlpha(std::string);
-	char toUpper(char);
-	char toLower(char);
-}
+bool isAlpha(char);
+bool isAlpha(std::string);
+char toUpper(char);
+std::string toUpper(std::string);
+char toLower(char);
+std::string toLower(std::string);
+void clear();
 
-std::string lifeDisplay(int);
+#endif
