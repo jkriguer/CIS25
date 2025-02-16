@@ -1,5 +1,4 @@
-﻿# Hangman
-  ```
+﻿  ```
     .========.     _  _                                      
     || /     |    | || | __ _  _ _   __ _  _ __   __ _  _ _  
     ||/     _|_   | __ |/ _` || ' \ / _` || '  \ / _` || ' \ 
@@ -9,10 +8,15 @@
   ========= / \ ====
   ||              ||
 ```
+> ### [Video presentation of program and code](https://www.youtube.com/watch?v=UHvsPSl6sa0)
+
+Installation instructions:<br>
+1. `git clone -n --depth=1 --filter=tree:0 https://github.com/jkriguer/CIS25/`
+2. `cd CIS25`
+3. `git sparse-checkout set --no-cone /Projects/hangman`
+4. `git checkout`
 
 This program is a simple word game where the user guesses letters to determine a hidden phrase.<br>
-
-[Video presentation of program and code](TODO)
 
 How to play:
 1. Two random words will be randomly chosen for you to guess.
