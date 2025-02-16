@@ -16,7 +16,6 @@ int populateWordList(std::vector<std::string>& vec) { //generate word list vecto
 			invalidWordCount++; //count number of invalid words
 		}
 	}
-	std::cout << "Debug: " << vec.size() << " words added.\n";
 	inputFile.close(); //file handle closed
 	if (vec.size() <= 1) {
 		return  (-11 - vec.size()); //-11 if empty, -12 if only one word
@@ -75,23 +74,20 @@ std::string displayWords(std::string words, std::vector<char> guessed) {
 	return output;
 }
 
-void drawBoard(int lives, std::string message, std::string words, std::vector<char> guessed) {
+void drawBoard(int lives, std::string words, std::vector<char> guessed) {
 	using std::cout;
 
 	clear(); //clear terminal
 	for (int i = 0; i <= 7; i++) {
-		cout << std::setw(30) << std::left << pictogram(i, lives);
+		cout << std::setw(30) << std::left << petroglyph(i, lives);
 		switch (i) {//individual line behaviors
-			case 1://print feedback to user
-				cout << message;
-				break;
 			case 3://print guess progress
 				cout << displayWords(words, guessed);
 				break;
 			case 5://print guessed letters
 				if (guessed.size() > 0) {
 					//sortVecChars(guessed);
-					cout << "Already guessed letters: " << listChars(guessed);
+					cout << "Tried letters: " << listChars(guessed);
 				}
 				break;
 			case 7://print lives remaining (maybe)
@@ -155,14 +151,8 @@ int lettersLeftToGuess(std::string words, std::vector<char> guessed) {
 	return unique.size() - correctLetters;
 }
 
-std::string pictogram(int line, int lives) { //just trust me that it works. it could theoretically be deduped but...
-	if (lives > 7 || lives < 0) { 
-		lives = (lives < 0) ? 0 : 7; //clamp if either var is out of bounds
-	}
-	if (line > 7 || line < 0) {
-		line = (line < 0) ? 0 : 7;
-	}
-	std::string ascii[] { //horrific ascii art blob, genuinely inscrutable
+std::string petroglyph(int line, int lives) { //just trust me that it works. it could theoretically be deduped but...
+	std::vector<std::string> ascii { //horrific ascii art blob, genuinely inscrutable
 		"  .========.", "  || /", "  ||/", "  ||", "  ||", "  ||", "=========-----====", "||              ||", 
 		"  .========.", "  || /    _|_", "  ||/    (o_o)", "  ||", "  ||", "  ||", "=========-----====", "||              ||", 
 		"  .========.", "  || /    _|_", "  ||/    (o_o)", "  ||      | |", "  ||      |_|", "  ||", "=========-----====", "||              ||", 
@@ -172,5 +162,5 @@ std::string pictogram(int line, int lives) { //just trust me that it works. it c
 		"  .========.", "  || /    _|_", "  ||/    (o_o)", "  ||     /| |\\", "  ||    ^ |_| ^", "  ||      / \\", "=========-----====", "||              ||", 
 		"  .========.", "  || /     |", "  ||/     _|_", "  ||     (x_x)", "  ||     /| |\\", "  ||    ^ |_| ^", "========= / \\ ====", "||              ||"
 	};
-	return ascii[((7 - lives) * 8) + line];
+	return ascii.at(((7 - lives) * 8) + line);
 }
