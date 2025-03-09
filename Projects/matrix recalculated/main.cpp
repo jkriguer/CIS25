@@ -1,6 +1,7 @@
 #include <iostream>
 #include <iomanip>
 #include <string>
+#include "util/matrix.h"
 
 using namespace std;
 
@@ -85,8 +86,7 @@ void addMatrices(bool add) {
     }
 }
 
-
-void multMatrices() {
+void multMatrices() { //bruteforced 2x2 only
     cout << "Multiplying..\n";
     matrixC[0][0] = matrixA[0][0] * matrixB[0][0] + matrixA[0][1] * matrixB[1][0];
     matrixC[0][1] = matrixA[0][0] * matrixB[0][1] + matrixA[0][1] * matrixB[1][1];
