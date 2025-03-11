@@ -40,17 +40,22 @@ Matrix matrixMathAdd(Matrix matA, Matrix matB) {
 	return output;
 }
 
-Matrix matrixMathMult(Matrix matA, Matrix matB) { //hardcoded 2x2 only
+Matrix matrixMathMult(Matrix matA, Matrix matB) {
 	if (!canMatricesMult(matA, matB)) { //return early if invalid
 		return FAIL_MATRIX;
 	}
-	Matrix out = Matrix(matA.size(), std::vector<double>(matB[0].size()));
-	out[0][0] = matA[0][0] * matB[0][0] + matA[0][1] * matB[1][0];
-	out[0][1] = matA[0][0] * matB[0][1] + matA[0][1] * matB[1][1];
-	out[1][0] = matA[1][1] * matB[1][0] + matA[1][0] * matB[0][0];
-	out[1][1] = matA[1][1] * matB[1][1] + matA[1][0] * matB[0][1];
+	Matrix out(matA.size(), vector<double>(matB[0].size()));
+	for (int i = 0; i < matA.size(); i++) { // used iterative matrix alg from wikipedia
+		for (int j = 0; j < matB[0].size(); j++) {
+			out[i][j] = 0;
+			for (int k = 0; k < matA[0].size(); k++) {
+				out[i][j] += matA[i][k] * matB[k][j];
+			}
+		}
+	}
 	return out;
 }
+
 
 Matrix makeMatrix(int rows, int cols, std::vector<double> vec) {
 	if (vec.size() != rows * cols) { //confirm that vector contains exactly enough elements for new matrix
