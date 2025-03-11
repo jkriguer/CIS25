@@ -44,16 +44,15 @@ Matrix matrixMathMult(Matrix matA, Matrix matB) {
 	if (!canMatricesMult(matA, matB)) { //return early if invalid
 		return FAIL_MATRIX;
 	}
-	Matrix out(matA.size(), vector<double>(matB[0].size()));
+	Matrix output(matA.size(), vector<double>(matB[0].size(), 0.0));
 	for (int i = 0; i < matA.size(); i++) { // used iterative matrix alg from wikipedia
 		for (int j = 0; j < matB[0].size(); j++) {
-			out[i][j] = 0;
 			for (int k = 0; k < matA[0].size(); k++) {
-				out[i][j] += matA[i][k] * matB[k][j];
+				output[i][j] += matA[i][k] * matB[k][j];
 			}
 		}
 	}
-	return out;
+	return output;
 }
 
 
@@ -96,4 +95,22 @@ bool canMatricesMult(Matrix matA, Matrix matB) {
 		return false;
 	}
 	return (matA[0].size() == matB.size()); //matrix A cols must match matrix B rows
+}
+
+void printMatrix(Matrix mat) {
+	int width = 3; //arbitrary start width
+	for (const auto& col : mat) { //first loop for spacing width
+		for (double item : col) {
+			int newWidth = std::format("{:g}", item).length() + 1; //convert to string and remove padding
+			if (newWidth > width) { //store new width if wider than current widest
+				width = newWidth;
+			}
+		}
+	}
+	for (const auto& col : mat) { //second loop for printing
+		for (double item : col) {
+			std::cout << std::setw(width) << std::left << std::format("{:g}", item);
+		}
+		std::cout << '\n';
+	}
 }

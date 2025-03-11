@@ -1,7 +1,9 @@
 #ifndef matrix_utils
 #define matrix_utils
 #include <vector>
-#include <algorithm>
+#include <format> //for printMatrix
+#include <iostream> //for printMatrix
+#include <iomanip> //for printMatrix
 
 using std::vector;
 using Matrix = vector<vector<double>>;
@@ -18,4 +20,5 @@ bool isMatrixValid(Matrix);
 bool canMatricesAdd(Matrix, Matrix);
 bool canMatricesMult(Matrix, Matrix);
 
+void printMatrix(Matrix);
 #endif
