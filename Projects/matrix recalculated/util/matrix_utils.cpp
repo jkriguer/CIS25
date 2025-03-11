@@ -1,17 +1,13 @@
 #include "matrix_utils.h"
 
-const Matrix FAIL_MATRIX = Matrix(0, std::vector<double>(0)); //invalid 0x0 matrix that returns for catching errors
+const Matrix FAIL_MATRIX(0, vector<double>(0)); //invalid 0x0 matrix that returns for catching errors
 
-Matrix blankMatrix(int rows, int cols, double filler) { //create blank rows*cols matrix
-	return Matrix(rows, std::vector<double>(cols, filler));
-}
-
-Matrix identityMatrixAdd(int x, int y){
-	return blankMatrix(x, y, 0.0);
+Matrix identityMatrixAdd(int rows, int cols) {
+	return Matrix(rows, vector<double>(cols, 0.0));
 }
 
 Matrix identityMatrixMult(int dim) { //create square matrix for multiplicative identity
-	Matrix output = blankMatrix(dim, dim, 0.0);
+	Matrix output(dim, vector<double>(dim, 0.0));
 	for (int i = 0; i < dim; i++) {
 		output[i][i] = 1.0;
 	}
@@ -60,7 +56,7 @@ Matrix makeMatrix(int rows, int cols, std::vector<double> vec) {
 	if (vec.size() != rows * cols) { //confirm that vector contains exactly enough elements for new matrix
 		return FAIL_MATRIX; //return 0x0 invalid
 	}
-	Matrix output = blankMatrix(rows, cols);
+	Matrix output(rows, vector<double>(cols, 0.0));
 	int vecIndex = 0;
 	for (int i = 0; i < rows; i++) { //populate output matrix row by row
 		for (int j = 0; j < cols; j++) {
