@@ -10,7 +10,7 @@ void inputMatrix(Matrix& mat) {
 }
 
 void printMatrix(Matrix mat) {
-	int width = 3; //arbitrary start width
+	int width = 4; //arbitrary start width
 	for (const auto& row : mat) { //first loop for spacing width
 		for (double item : row) {
 			int newWidth = std::format("{:g}", item).length() + 1; //convert to string and remove padding
