@@ -1,7 +1,5 @@
 #include "matrix_utils.h"
 
-const Matrix FAIL_MATRIX(0, vector<double>(0)); //invalid 0x0 matrix that returns for catching errors
-
 Matrix identityMatrixAdd(int rows, int cols) { //returns a matrix of size rows x cols populated with 0s
 	return Matrix(rows, vector<double>(cols, 0.0));
 }
@@ -99,22 +97,4 @@ bool canMatricesMult(Matrix matA, Matrix matB) {
 		return false;
 	}
 	return (matA[0].size() == matB.size()); //matrix A cols must match matrix B rows
-}
-
-void printMatrix(Matrix mat) {
-	int width = 3; //arbitrary start width
-	for (const auto& col : mat) { //first loop for spacing width
-		for (double item : col) {
-			int newWidth = std::format("{:g}", item).length() + 1; //convert to string and remove padding
-			if (newWidth > width) { //store new width if wider than current widest
-				width = newWidth;
-			}
-		}
-	}
-	for (const auto& col : mat) { //second loop for printing
-		for (double item : col) {
-			std::cout << std::setw(width) << std::left << std::format("{:g}", item);
-		}
-		std::cout << '\n';
-	}
 }

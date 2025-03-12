@@ -1,13 +1,12 @@
 #ifndef matrix_utils
 #define matrix_utils
 #include <vector>
-#include <format> //for printMatrix
-#include <iostream> //for printMatrix
-#include <iomanip> //for printMatrix
 
 using std::vector;
 using Matrix = vector<vector<double>>;
+const Matrix FAIL_MATRIX(0, vector<double>(0)); //invalid 0x0 matrix that returns for catching errors
 
+Matrix identityMatrixAdd(int, int);
 Matrix identityMatrixAdd(Matrix);
 Matrix identityMatrixMult(int);
 Matrix inverseMatrixAdd(Matrix);
@@ -19,6 +18,4 @@ Matrix makeMatrix(int, int, vector<double>); //vec must contain x*y elements
 bool isMatrixValid(Matrix);
 bool canMatricesAdd(Matrix, Matrix);
 bool canMatricesMult(Matrix, Matrix);
-
-void printMatrix(Matrix);
 #endif
