@@ -1,8 +1,7 @@
 #include <iostream>
-#include <vector>
 #include "util/matrix_utils.h"
 
-void inputMatrix(Matrix);
+void inputMatrix(Matrix&);
 
 int main() {
     Matrix matrixA(2, vector<double>(2, 0.0)), matrixB = identityMatrixMult(2);
@@ -13,14 +12,15 @@ int main() {
     matrixA[1][1] = 4;
     printMatrix(matrixA);
     printMatrix(matrixMathMult(matrixA, matrixB));
-    printMatrix(inverseMatrixAdd(matrixA));
+    inputMatrix(matrixA);
+    printMatrix(matrixMathMult(matrixA, matrixB));
 }
 
-void inputMatrix(Matrix mat) {
-    std::cout << "Enter " << mat.size() * mat[0].size() << " elements: ";
-    for (int j = 0; j < mat.size(); j++) {
-        for (int k = 0; k < mat[0].size(); k++) {
-            std::cin >> mat[j][k];
-        }
+void inputMatrix(Matrix& mat) {
+    vector<double> in(mat.size() * mat[0].size());
+    std::cout << "Enter " << in.size() << " elements: ";
+    for (int i = 0; i < in.size(); i++) {
+        std::cin >> in[i];
     }
+    mat = makeMatrix(mat.size(), mat[0].size(), in);
 }
