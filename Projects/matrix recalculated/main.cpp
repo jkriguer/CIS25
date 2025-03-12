@@ -13,9 +13,11 @@ int main() {
             val = rand() % 100;
         }
     }
-    cout << "Debug: Modified 2x2 Matrix";
+    cout << "Debug: Modified 2x2 Matrix\n";
     printMatrix(matrixA);
+    cout << "Debug: identity of previous matrix (should be unchanged)\n";
     printMatrix(matrixMathMult(matrixA, matrixB));
     inputMatrix(matrixA);
+    cout << "Debug: identity of previous matrix (should be unchanged)\n";
     printMatrix(matrixMathMult(matrixA, matrixB));
 }
