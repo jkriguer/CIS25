@@ -2,8 +2,12 @@
 
 const Matrix FAIL_MATRIX(0, vector<double>(0)); //invalid 0x0 matrix that returns for catching errors
 
-Matrix identityMatrixAdd(int rows, int cols) {
+Matrix identityMatrixAdd(int rows, int cols) { //returns a matrix of size rows x cols populated with 0s
 	return Matrix(rows, vector<double>(cols, 0.0));
+}
+
+Matrix identityMatrixAdd(Matrix mat) { //returns matrix of same dimensions as given, populated with 0s
+	return isMatrixValid(mat) ? identityMatrixAdd(mat.size(), mat[0].size()) : FAIL_MATRIX;
 }
 
 Matrix identityMatrixMult(int dim) { //create square matrix for multiplicative identity
