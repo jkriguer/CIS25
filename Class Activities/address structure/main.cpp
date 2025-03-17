@@ -2,8 +2,18 @@
 #include <string>
 
 #include "util/scanner.h" //library for validating user input
-#include "util/Address.h" //address object
-#include "util/Customer.h" //customer object
+
+struct Address {
+	std::string streetAddress;
+	std::string city;
+	int zipCode;
+};
+
+struct Customer {
+	int customerID;
+	std::string customerName;
+	Address customerAddress;
+};
 
 int main() {
 
