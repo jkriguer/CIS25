@@ -3,10 +3,11 @@
 
 #include <iostream>
 #include "scanner.h"
+#include "Date.h"
 
 struct Movie {
 	std::string title = "Untitled Movie";
-	int release = 1899;
+	Date release;
 	double review = -1.0;
 	void inputMovie();
 };
