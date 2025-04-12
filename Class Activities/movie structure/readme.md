@@ -1,0 +1,2 @@
+# Movie Struct
+This folder contains my class assignment to create and display a Movie object with input validation. Movie contains a string for the movie title, an int for the movie's release year, and a double to represent the movie's rating out of 5.
