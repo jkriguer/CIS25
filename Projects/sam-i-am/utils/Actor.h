@@ -13,11 +13,9 @@ protected:
 	std::string label = "Unnamed Actor";
 	int contact;
 public:
-	//constructors
-	//Actor();
 	Actor(const SharedBoard&, int, int, std::string);
 	virtual ~Actor() = default; //deconstructor for subclass(es?)
-
+	int getContact();
 };
 
 #endif // !ACTOR
