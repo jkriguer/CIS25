@@ -3,7 +3,6 @@
 
 #include <vector>
 #include <memory>
-#include "Actor.h" //Actor class
 
 class Actor; //forward dec
 
