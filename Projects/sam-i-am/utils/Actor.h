@@ -16,6 +16,7 @@ public:
 	Actor(const SharedBoard&, int, int, std::string);
 	virtual ~Actor() = default; //deconstructor for subclass(es?)
 	int getContact();
+	std::string toString();
 };
 
 #endif // !ACTOR

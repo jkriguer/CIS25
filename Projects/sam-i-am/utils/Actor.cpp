@@ -12,3 +12,7 @@ Actor::Actor(const SharedBoard& b, int _xCoord, int _yCoord, std::string _label)
 int Actor::getContact() {
 	return this->contact;
 }
+//other methods
+std::string Actor::toString() {
+	return label + " (" + std::to_string(xCoord) + ", " + std::to_string(yCoord) + ")";
+}

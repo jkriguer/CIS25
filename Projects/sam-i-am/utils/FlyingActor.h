@@ -15,17 +15,7 @@ private:
 	Bearing bearing;
 	bool flyingLow;
 public:
-	FlyingActor();
-	//constructors
-	//FlyingActor(std::string _label, Faction _faction, double _factionConfidence, int _speed, Bearing _bearing, bool _flyingLow);
-	//setters and getters
-	
-	////other methods
-	//bool isHot();
-	//std::string readBRAA();
-	//std::string toString();
+	std::string toString();
 };
-
-//std::ostream& operator<<(std::ostream&, const FlyingObject&);
 
 #endif 
