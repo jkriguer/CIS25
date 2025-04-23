@@ -1,11 +1,13 @@
 #include <iostream>
-#include <vector>
-#include "utils/FlyingActor.h"
-
-class Grid{};
+#include "utils/sam_utils.h"
+#include "utils/Actor.h"
 
 int main() {
-	//std::vector<std::vector<Grid>>;
-	FlyingActor test("test", Faction::FRIENDLY, 1.0, 5, Bearing::S, true);
-	std::cout << test.toString() << '\n';
+	const int X_MAX = 20; //board X size
+	const int Y_MAX = 20; //board y size
+	SharedBoard gameBoard = std::make_shared<Board>(Y_MAX, std::vector<std::unique_ptr<Actor>>(X_MAX));
+	auto player = std::make_unique<Actor>(gameBoard, X_MAX/2, Y_MAX/2, "Battery");
+	printBoard(gameBoard);
+
+	return 0;
 }
