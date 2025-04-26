@@ -2,10 +2,8 @@
 #include "sam_utils.h" //getContactNumber
 
 //constructor
-Actor::Actor(const SharedBoard& b, int _xCoord, int _yCoord, std::string _label) : board(b) { //args
-	this->xCoord = _xCoord;
-	this->yCoord = _yCoord;
-	this->label = _label;
+Actor::Actor(const SharedBoard& b, int x, int y, std::string l) :
+	board(b), xCoord(x), yCoord(y), label(l) {
 	this->contact = getNewContactNumber();
 }
 //setters and getters
