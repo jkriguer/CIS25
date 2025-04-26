@@ -4,9 +4,9 @@
 #include <iomanip> //UI formatting
 #include "Actor.h"
 
-int getNewContactNumber() {
+char getNewContactNumber() {
 	static int count = 0;
-	return count++;
+    return '0' + (count++ % 10);
 }
 
 std::vector<std::string> drawBoard(const SharedBoard& board) {
@@ -15,7 +15,7 @@ std::vector<std::string> drawBoard(const SharedBoard& board) {
         std::string line = "";
         for (const auto& cell : row) {
             if (cell) {
-                line += std::to_string(cell->getContact());
+                line += cell->getContact();
             }
             else {
                 line+= '.';
@@ -67,4 +67,10 @@ std::pair<int, int> getBearingMods(Bearing b) { //conceals ugly switching logic
         default:
             return { 0, 0 };
     }
+}
+
+std::vector<std::pair<int, int>> getUnitList(const SharedBoard&) {
+    std::vector<std::pair<int, int>> output;
+    //TODO iterate through and add coord pairs
+    return output;
 }
