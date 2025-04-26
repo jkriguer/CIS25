@@ -4,20 +4,24 @@
 #include "util/matrix_io.h" //functions used for loading/saving matrices as .csv
 int main() {
     using std::cout;
-    Matrix matrixA(identityMatrixAdd(2, 2)), matrixB = identityMatrixMult(2);
-    cout << "Debug: Blank 2x2 Matrix\n";
+    Matrix matrixA(identityMatrixAdd(4, 4)), matrixB(identityMatrixMult(4));
+    cout << "Debug: Blank 4x4 Matrix\n";
     printMatrix(matrixA);
     srand(time(nullptr)); //seed PRNG
-    for (auto& rows : matrixA) {
-        for (double val : rows) {
+    for (auto& rows : matrixA) { //randomly fill matrix
+        for (double& val : rows) {
             val = rand() % 100;
         }
     }
-    cout << "Debug: Modified 2x2 Matrix\n";
+    cout << "Debug: Modified 4x4 Matrix\n";
     printMatrix(matrixA);
     cout << "Debug: identity of previous matrix (should be unchanged)\n";
     printMatrix(matrixMathMult(matrixA, matrixB));
-    inputMatrix(matrixA);
-    cout << "Debug: identity of previous matrix (should be unchanged)\n";
-    printMatrix(matrixMathMult(matrixA, matrixB));
+    //inputMatrix(matrixA);
+    //cout << "Debug: identity of input matrix (should be unchanged from input)\n";
+    //printMatrix(matrixMathMult(matrixA, matrixB));
+    //cout << "Enter a filename to save this matrix as: ";
+    //std::string input;
+    //std::cin >> input;
+    saveMatrix(matrixA, "MyMatrix");
 }
