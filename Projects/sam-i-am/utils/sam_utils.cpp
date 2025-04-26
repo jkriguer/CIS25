@@ -45,3 +45,26 @@ void printUI(std::string titleState, std::vector<std::string> visualDisplay, std
         cout << '\n';
     }
 }
+
+std::pair<int, int> getBearingMods(Bearing b) { //conceals ugly switching logic
+    switch (b) {
+        case Bearing::N:
+            return { 0, -1 };
+        case Bearing::E:
+            return { 1, 0 };
+        case Bearing::S:
+            return { 0, 1 };
+        case Bearing::W:
+            return { -1, 0 };
+        case Bearing::NW:
+            return { -1, -1 };
+        case Bearing::NE:
+            return { 1, -1 };
+        case Bearing::SE:
+            return { 1, 1 };
+        case Bearing::SW:
+            return { -1, 1 };
+        default:
+            return { 0, 0 };
+    }
+}

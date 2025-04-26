@@ -6,7 +6,7 @@
 #include "sam_types.h" //types
 
 int getNewContactNumber();
-std::vector<std::string> drawBoard(const SharedBoard& board);
+std::vector<std::string> drawBoard(const SharedBoard&);
 void printUI(std::string, std::vector<std::string>, std::string);
-
+std::pair<int, int> getBearingMods(Bearing);
 #endif // !SAM_UTILS
