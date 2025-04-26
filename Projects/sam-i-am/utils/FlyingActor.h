@@ -15,7 +15,9 @@ private:
 	Bearing bearing;
 	bool flyingLow;
 public:
+	FlyingActor(const SharedBoard&, int, int, std::string, Faction, int, Bearing, bool); //every single arg
 	std::string toString();
+	bool isClosing(int, int);
+	void move();
 };
-
 #endif 
