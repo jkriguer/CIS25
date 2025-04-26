@@ -9,15 +9,14 @@ int saveMatrix(Matrix& mat, std::string filename) { //saves Matrix mat to filena
     if (!file) {
         return -2; //error if file handle couldn't be opened
     }
-    file << mat.size() << ", " << mat[0].size() << '\n'; //matrix dims in first line
     for (const auto& row : mat) {
         for (int i = 0; i < row.size(); i++) {
             file << row[i]; //write element to file
             if (i < row.size() - 1) {
                 file << ','; //write comma to file unless last element on line
             }
-            file << '\n';
         }
+        file << '\n';
     }
     file.close(); //file handle closed
     return 0; //no error
