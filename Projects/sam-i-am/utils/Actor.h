@@ -11,10 +11,11 @@ protected:
 	int xCoord = 0;
 	int yCoord = 0;
 	std::string label = "Unnamed Actor";
-	int contact;
+	char contact;
 public:
 	Actor(const SharedBoard&, int, int, std::string);
-	int getContact();
+	Actor(const SharedBoard&, int, int, std::string, char);
+	char getContact();
 	std::string toString();
 	virtual ~Actor() = default; //deconstructor for subclass(es?)
 	virtual void move();
