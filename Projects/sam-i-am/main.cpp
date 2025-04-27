@@ -31,8 +31,8 @@ int main() {
 	(*gameBoard)[playerX - 2][playerY - 2] = std::make_unique<Actor>(gameBoard, playerX - 3, playerY - 3, "City", 'C');
 
 	//place 2 friendlies
-	(*gameBoard)[1][26] = std::make_unique<FlyingActor>(gameBoard, 26, 1, getArchetype(FRIENDLY), S);
-	(*gameBoard)[1][25] = std::make_unique<FlyingActor>(gameBoard, 25, 1, getArchetype(FRIENDLY), S);
+	(*gameBoard)[1][26] = std::make_unique<FlyingActor>(gameBoard, 26, 1, getArchetype(Friendly, 1), South);
+	(*gameBoard)[1][25] = std::make_unique<FlyingActor>(gameBoard, 25, 1, getArchetype(Friendly, 1), South);
 
 	//place 2 neutrals
 	//(*gameBoard)[15][]

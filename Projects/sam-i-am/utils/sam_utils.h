@@ -5,7 +5,7 @@
 
 namespace SAMUTIL {
 	char getNewContactNumber();
-	Aircraft getArchetype(Faction);
+	Aircraft getArchetype(Faction, int);
 	std::vector<std::string> drawBoard(const SharedBoard&);
 	void printUI(std::string, std::vector<std::string>, std::string);
 	std::pair<int, int> getBearingMods(Bearing);

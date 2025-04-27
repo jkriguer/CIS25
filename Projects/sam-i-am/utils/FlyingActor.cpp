@@ -5,7 +5,7 @@ using namespace SAMUTIL;
 
 FlyingActor::FlyingActor(const SharedBoard& board, int x, int y, std::string l, Faction f, int s, Bearing _bearing, bool fL) :
 	base(board, x, y, l), faction(f), speed(s), bearing(_bearing), flyingLow(fL) {
-	if (f == Faction::FRIENDLY) { //if contact is friendly
+	if (f == Faction::Friendly) { //if contact is friendly
 		this->trackQuality = 1.0; //full confidence
 	}
 	else { //placeholder, will randomly determine later
@@ -14,7 +14,7 @@ FlyingActor::FlyingActor(const SharedBoard& board, int x, int y, std::string l, 
 }
 
 FlyingActor::FlyingActor(const SharedBoard& board, int x, int y, Faction f, Bearing b) :
-	FlyingActor(board, x, y, getArchetype(f), b) {
+	FlyingActor(board, x, y, getArchetype(f, -1), b) {
 }
 FlyingActor::FlyingActor(const SharedBoard& board, int x, int y, Aircraft a, Bearing b) : base(board, x, y, "UFO") {
 	this->label = a.label;

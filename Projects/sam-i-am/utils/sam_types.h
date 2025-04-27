@@ -11,8 +11,8 @@ class FlyingActor; //forward dec
 using Board = std::vector<std::vector<std::unique_ptr<Actor>>>; //saves so much space
 using SharedBoard = std::shared_ptr<Board>;
 
-enum Bearing { N, E, S, W, NW, NE, SE, SW };
-enum Faction { NEUTRAL, HOSTILE, FRIENDLY };
+enum Bearing { North, East, South, West, Northwest, Northeast, Southeast, Southwest };
+enum Faction { Neutral, Enemy, Friendly };
 
 struct SAM {
 	std::string label;

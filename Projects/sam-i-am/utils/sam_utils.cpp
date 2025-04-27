@@ -12,20 +12,20 @@ char SAMUTIL::getNewContactNumber() {
     return '0' + (count++ % 10);
 }
 
-Aircraft SAMUTIL::getArchetype(Faction f) {
+Aircraft SAMUTIL::getArchetype(Faction f, int index = -1) {
     const int SPD_SLOW = 1, SPD_MED = 2, SPD_FAST = 4;
     const std::unordered_map<Faction, std::vector<Aircraft>> archetypes {
-        { Faction::FRIENDLY, {
+        { Faction::Friendly, {
             {"Fighter", SPD_FAST, true, true},
             {"Interceptor", SPD_FAST, false, true}
         }},
-        { Faction::HOSTILE, {
+        { Faction::Enemy, {
             {"Bomber", SPD_MED, false, true},
             {"Interdictor", SPD_FAST, true, true},
             {"Attacker", SPD_SLOW, true, true},
             {"Command", SPD_MED, false}
         }},
-        { Faction::NEUTRAL, {
+        { Faction::Neutral, {
             {"Airliner", SPD_MED, false},
             {"Cropduster", SPD_SLOW, true},
             {"Concorde", SPD_FAST, false}
@@ -33,7 +33,13 @@ Aircraft SAMUTIL::getArchetype(Faction f) {
     };
 
     const auto& vec = archetypes.at(f);
-    return vec.at(rand() % vec.size());
+    if (index >= vec.size()) { //clamp if index too large
+        index = vec.size() - 1;
+    }
+    if (index < 0) { //negative index returns random
+        index = rand() % vec.size();
+    }
+    return vec.at(index);
 }
 
 std::vector<std::string> SAMUTIL::drawBoard(const SharedBoard& board) {
@@ -84,21 +90,21 @@ void SAMUTIL::printUI(std::string titleState, std::vector<std::string> visualDis
 
 std::pair<int, int> SAMUTIL::getBearingMods(Bearing b) { //conceals ugly switching logic
     switch (b) {
-        case Bearing::N:
+        case Bearing::North:
             return { 0, -1 };
-        case Bearing::E:
+        case Bearing::East:
             return { 1, 0 };
-        case Bearing::S:
+        case Bearing::South:
             return { 0, 1 };
-        case Bearing::W:
+        case Bearing::West:
             return { -1, 0 };
-        case Bearing::NW:
+        case Bearing::Northwest:
             return { -1, -1 };
-        case Bearing::NE:
+        case Bearing::Northeast:
             return { 1, -1 };
-        case Bearing::SE:
+        case Bearing::Southeast:
             return { 1, 1 };
-        case Bearing::SW:
+        case Bearing::Southwest:
             return { -1, 1 };
         default:
             return { 0, 0 };
@@ -107,21 +113,21 @@ std::pair<int, int> SAMUTIL::getBearingMods(Bearing b) { //conceals ugly switchi
 
 std::string SAMUTIL::bearingToStr(Bearing b) {
     switch (b) {
-        case Bearing::N:
+        case Bearing::North:
             return "N";
-        case Bearing::E:
+        case Bearing::East:
             return "E";
-        case Bearing::S:
+        case Bearing::South:
             return "S";
-        case Bearing::W:
+        case Bearing::West:
             return "W";
-        case Bearing::NW:
+        case Bearing::Northwest:
             return "NW";
-        case Bearing::NE:
+        case Bearing::Northeast:
             return "NE";
-        case Bearing::SE:
+        case Bearing::Southeast:
             return "SE";
-        case Bearing::SW:
+        case Bearing::Southwest:
             return "SW";
         default:
             return "??";
@@ -130,11 +136,11 @@ std::string SAMUTIL::bearingToStr(Bearing b) {
 
 std::string SAMUTIL::factionToStr(Faction F) {
     switch (F) {
-        case Faction::FRIENDLY:
+        case Faction::Friendly:
             return "Friendly";
-        case Faction::HOSTILE:
+        case Faction::Enemy:
             return "Hostile";
-        case Faction::NEUTRAL:
+        case Faction::Neutral:
             return "Neutral";
         default:
             return "???";
