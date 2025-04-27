@@ -5,19 +5,26 @@
 
 class Actor {
 protected:
+	ActorType actorType;
 	const SharedBoard board;
-	int xCoord = 0;
-	int yCoord = 0;
+	int x = -1; //changed after construction
+	int y = -1; //changed after construction
 	std::string label = "Unnamed Actor";
-	char contact;
+	char mapIcon = '?';
+	Faction faction;
+	double trackQuality; //from 0.0 (unidentified) to 1.0 (fully identified)
+	int speed = 0; //in tiles per turn
+	Bearing bearing = Bearing::North;
+	bool flyingLow = true;
 public:
-	Actor(const SharedBoard&, int, int, std::string);
-	Actor(const SharedBoard&, int, int, std::string, char);
-	char getContact();
+	Actor(ActorType, const SharedBoard&, std::string, char); //stationary
+	Actor(const SharedBoard&, Aircraft, Bearing); //mobile
+	char getMapIcon();
+	bool setCoords(int, int);
 	std::string toString();
+	std::string toString(std::shared_ptr<Actor>);
 	double distanceTo(std::shared_ptr<Actor>);
-	virtual ~Actor() = default; //deconstructor for subclass(es?)
-	virtual void move();
+	void move();
 };
 
 #endif // !ACTOR

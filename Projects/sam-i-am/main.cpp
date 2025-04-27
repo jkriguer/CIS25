@@ -1,15 +1,14 @@
 #include <iostream>
 #include "utils/sam_utils.h"
 #include "utils/Actor.h"
-#include "utils/FlyingActor.h"
 #include "utils/scanner.h"
 
 using namespace SAMUTIL;
 
 int main() {
 
-	const int X_MAX = 30; //board X size
-	const int Y_MAX = 50; //board y size
+	const int X_MAX = 40; //board X size
+	const int Y_MAX = 60; //board y size
 
 	SAM missileArchetypes[]{ //"character select"
 	SAM("SA-2", 16, 1),
@@ -24,18 +23,18 @@ int main() {
 
 	srand((int)time(nullptr)); //RNG seeded
 
-	//place player and city
-	int playerX = X_MAX / 2 + (rand() % (X_MAX / 10) - (X_MAX / 5)); // 12~18?
-	int playerY = Y_MAX / 2 + (rand() % (Y_MAX / 10) - (Y_MAX / 5)); // 22~27?
-	(*gameBoard)[playerX][playerY] = std::make_unique<Actor>(gameBoard, playerX, playerY, "Battery", 'B');
-	(*gameBoard)[playerX - 2][playerY - 2] = std::make_unique<Actor>(gameBoard, playerX - 3, playerY - 3, "City", 'C');
+	//place player and 2 cities
+	makeAndPlace(Player, gameBoard, "Battery", 'B', 16, 22);
+	makeAndPlace(City, gameBoard, "City 1", 'C', 13, 18);
+	makeAndPlace(City, gameBoard, "City 2", 'C', 20, 24);
 
 	//place 2 friendlies
-	(*gameBoard)[1][26] = std::make_unique<FlyingActor>(gameBoard, 26, 1, getArchetype(Friendly, 1), South);
-	(*gameBoard)[1][25] = std::make_unique<FlyingActor>(gameBoard, 25, 1, getArchetype(Friendly, 1), South);
+	makeAndPlace(gameBoard, getArchetype(Friendly, 1), South, 26, 1);
+	makeAndPlace(gameBoard, getArchetype(Friendly, 1), South, 25, 2);
 
 	//place 2 neutrals
-	//(*gameBoard)[15][]
+	makeAndPlace(gameBoard, getArchetype(Neutral), East, 10, 10);
+	makeAndPlace(gameBoard, getArchetype(Neutral), Northeast, 20, 20);
 
 
 	printUI("Test title", drawBoard(gameBoard), "Test options");

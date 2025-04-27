@@ -12,7 +12,7 @@ char SAMUTIL::getNewContactNumber() {
     return '0' + (count++ % 10);
 }
 
-Aircraft SAMUTIL::getArchetype(Faction f, int index = -1) {
+Aircraft SAMUTIL::getArchetype(Faction f, int index) {
     const int SPD_SLOW = 1, SPD_MED = 2, SPD_FAST = 4;
     const std::unordered_map<Faction, std::vector<Aircraft>> archetypes {
         { Faction::Friendly, {
@@ -52,7 +52,7 @@ std::vector<std::string> SAMUTIL::drawBoard(const SharedBoard& board) {
         line += std::to_string(i % 10) + ' '; //debug
         for (int j = 0; j < x; j++) {
             if ((*board)[j][i]) {
-                line += (*board)[j][i]->getContact();
+                line += (*board)[j][i]->getMapIcon();
             }
             else {
                 line += '.';
@@ -153,15 +153,24 @@ std::vector<std::pair<int, int>> SAMUTIL::getUnitList(const SharedBoard&) {
     return output;
 }
 
+bool SAMUTIL::makeAndPlace(ActorType aT, const SharedBoard& board, std::string label, char c, int x, int y) {
+    if ((*board)[x][y]) { //fail if cell occupied
+        return false;
+    }
+    (*board)[x][y] = std::make_unique<Actor>(aT, board, label, c);
+    (*board)[x][y]->setCoords(x, y);
+    return true; //success
+}
+
+bool SAMUTIL::makeAndPlace(const SharedBoard& board, Aircraft role, Bearing b, int x, int y) {
+    if ((*board)[x][y]) { //fail if cell occupied
+        return false;
+    }
+    (*board)[x][y] = std::make_unique<Actor>(board, role, b);
+    (*board)[x][y]->setCoords(x, y);
+    return true; //success
+}
+
 void SAMUTIL::clear() {
     printf("\033c"); //better than using defs to decide to system(clear)/system(cls)
 }
-
-// too much trouble to get working in this timeframe
-//void makeAndPlaceActor(const SharedBoard& b, int x, int y, std::string l, char c) {
-//    (*b)[x][y] = std::make_unique<Actor>(b, x, y, l, c);
-//}
-//
-//void makeAndPlaceFlyingActor(SharedBoard& b, int x, int y, std::string l, Faction f, int s, Bearing B, bool fL) {
-//    (*b)[y][x] = std::make_unique<FlyingActor>(b, x, y, l, f, s, B, fL);
-//}

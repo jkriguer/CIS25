@@ -5,7 +5,7 @@
 
 namespace SAMUTIL {
 	char getNewContactNumber();
-	Aircraft getArchetype(Faction, int);
+	Aircraft getArchetype(Faction, int = -1);
 	std::vector<std::string> drawBoard(const SharedBoard&);
 	void printUI(std::string, std::vector<std::string>, std::string);
 	std::pair<int, int> getBearingMods(Bearing);
@@ -13,9 +13,8 @@ namespace SAMUTIL {
 	std::string factionToStr(Faction);
 	std::vector<std::pair<int, int>> getUnitList(const SharedBoard&);
 	void clear();
+	bool makeAndPlace(ActorType, const SharedBoard&, std::string, char, int, int);
+	bool makeAndPlace(const SharedBoard&, Aircraft, Bearing, int, int);
 }
-
-//void makeAndPlaceActor(const SharedBoard&, int, int, std::string, char);
-//void makeAndPlaceFlyingActor(const SharedBoard&, int, int, std::string, Faction, int, Bearing, bool);
 
 #endif // !SAM_UTILS
