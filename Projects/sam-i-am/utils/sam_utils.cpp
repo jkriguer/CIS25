@@ -17,8 +17,7 @@ Aircraft SAMUTIL::getArchetype(Faction f) {
     const std::unordered_map<Faction, std::vector<Aircraft>> archetypes {
         { Faction::FRIENDLY, {
             {"Fighter", SPD_FAST, true, true},
-            {"Interceptor", SPD_FAST, false, true},
-            {"Early Warning", SPD_MED, false}
+            {"Interceptor", SPD_FAST, false, true}
         }},
         { Faction::HOSTILE, {
             {"Bomber", SPD_MED, false, true},
@@ -103,6 +102,42 @@ std::pair<int, int> SAMUTIL::getBearingMods(Bearing b) { //conceals ugly switchi
             return { -1, 1 };
         default:
             return { 0, 0 };
+    }
+}
+
+std::string SAMUTIL::bearingToStr(Bearing b) {
+    switch (b) {
+        case Bearing::N:
+            return "N";
+        case Bearing::E:
+            return "E";
+        case Bearing::S:
+            return "S";
+        case Bearing::W:
+            return "W";
+        case Bearing::NW:
+            return "NW";
+        case Bearing::NE:
+            return "NE";
+        case Bearing::SE:
+            return "SE";
+        case Bearing::SW:
+            return "SW";
+        default:
+            return "??";
+    }
+}
+
+std::string SAMUTIL::factionToStr(Faction F) {
+    switch (F) {
+        case Faction::FRIENDLY:
+            return "Friendly";
+        case Faction::HOSTILE:
+            return "Hostile";
+        case Faction::NEUTRAL:
+            return "Neutral";
+        default:
+            return "???";
     }
 }
 

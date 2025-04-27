@@ -9,6 +9,8 @@ namespace SAMUTIL {
 	std::vector<std::string> drawBoard(const SharedBoard&);
 	void printUI(std::string, std::vector<std::string>, std::string);
 	std::pair<int, int> getBearingMods(Bearing);
+	std::string bearingToStr(Bearing);
+	std::string factionToStr(Faction);
 	std::vector<std::pair<int, int>> getUnitList(const SharedBoard&);
 	void clear();
 }
