@@ -1,6 +1,8 @@
 #include "FlyingActor.h" //header
 #include "sam_utils.h" //getBearingMods
 
+using namespace SAMUTIL;
+
 FlyingActor::FlyingActor(const SharedBoard& board, int x, int y, std::string l, Faction f, int s, Bearing _bearing, bool fL) :
 	base(board, x, y, l), faction(f), speed(s), bearing(_bearing), flyingLow(fL) {
 	if (f == Faction::FRIENDLY) { //if contact is friendly
@@ -11,12 +13,15 @@ FlyingActor::FlyingActor(const SharedBoard& board, int x, int y, std::string l, 
 	}
 }
 
-std::string FlyingActor::toString() {
-	return "FA NYI";
+FlyingActor::FlyingActor(const SharedBoard& board, int x, int y, Faction f, Bearing b) : base(board, x, y, "UFO") {
+	Aircraft archetype = getArchetype(f);
+	this->label = archetype.label;
+	this->flyingLow = archetype.flyingLow;
+	this->speed = archetype.speed;
 }
 
-bool isClosing(Actor actor) { //checks if next movement closes on coord?
-	return false; //NYI
+std::string FlyingActor::toString() {
+	return "FA NYI";
 }
 
 void FlyingActor::move() {

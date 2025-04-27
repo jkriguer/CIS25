@@ -1,8 +1,6 @@
 #ifndef FLYING_ACTOR_CLASS
 #define FLYING_ACTOR_CLASS
 
-#include <iostream>
-#include <string>
 #include "Actor.h"
 #include "sam_types.h"
 
@@ -16,8 +14,9 @@ private:
 	bool flyingLow;
 public:
 	FlyingActor(const SharedBoard&, int, int, std::string, Faction, int, Bearing, bool); //every single arg
+	FlyingActor(const SharedBoard&, int, int, Faction, Bearing);
 	std::string toString();
-	bool isClosing(int, int);
 	void move();
 };
+
 #endif 
