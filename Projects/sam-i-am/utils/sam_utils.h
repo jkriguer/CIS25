@@ -1,13 +1,19 @@
 #ifndef SAM_UTILS
 #define SAM_UTILS
 
-#include <vector>
-#include <string>
 #include "sam_types.h" //types
 
-char getNewContactNumber();
-std::vector<std::string> drawBoard(const SharedBoard&);
-void printUI(std::string, std::vector<std::string>, std::string);
-std::pair<int, int> getBearingMods(Bearing);
-std::vector<std::pair<int, int>> getUnitList(const SharedBoard&);
+namespace SAMUTIL {
+	char getNewContactNumber();
+	Aircraft getArchetype(Faction);
+	std::vector<std::string> drawBoard(const SharedBoard&);
+	void printUI(std::string, std::vector<std::string>, std::string);
+	std::pair<int, int> getBearingMods(Bearing);
+	std::vector<std::pair<int, int>> getUnitList(const SharedBoard&);
+	void clear();
+}
+
+//void makeAndPlaceActor(const SharedBoard&, int, int, std::string, char);
+//void makeAndPlaceFlyingActor(const SharedBoard&, int, int, std::string, Faction, int, Bearing, bool);
+
 #endif // !SAM_UTILS
