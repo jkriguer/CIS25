@@ -6,22 +6,29 @@ using namespace SAMUTIL;
 FlyingActor::FlyingActor(const SharedBoard& board, int x, int y, std::string l, Faction f, int s, Bearing _bearing, bool fL) :
 	base(board, x, y, l), faction(f), speed(s), bearing(_bearing), flyingLow(fL) {
 	if (f == Faction::FRIENDLY) { //if contact is friendly
-		this->factionConfidence = 1.0; //full confidence
+		this->trackQuality = 1.0; //full confidence
 	}
 	else { //placeholder, will randomly determine later
-		this->factionConfidence = 0.5; //otherwise random confidence
+		this->trackQuality = 0.5; //otherwise random confidence
 	}
 }
 
-FlyingActor::FlyingActor(const SharedBoard& board, int x, int y, Faction f, Bearing b) : base(board, x, y, "UFO") {
-	Aircraft archetype = getArchetype(f);
-	this->label = archetype.label;
-	this->flyingLow = archetype.flyingLow;
-	this->speed = archetype.speed;
+FlyingActor::FlyingActor(const SharedBoard& board, int x, int y, Faction f, Bearing b) :
+	FlyingActor(board, x, y, getArchetype(f), b) {
+}
+FlyingActor::FlyingActor(const SharedBoard& board, int x, int y, Aircraft a, Bearing b) : base(board, x, y, "UFO") {
+	this->label = a.label;
+	this->flyingLow = a.flyingLow;
+	this->speed = a.speed;
 }
 
-std::string FlyingActor::toString() {
-	return "FA NYI";
+std::string FlyingActor::toString(std::shared_ptr<Actor> player) {
+	std::string output = "Track #" + std::to_string(getContact()) + ", ";
+	output += ((trackQuality >= 90) ? factionToStr(this->faction) : "Unknown") + ". ";
+	output += "Bearing: " + ((trackQuality >= 25) ? bearingToStr(this->bearing) : "TBD") + ". ";
+	output += "Range: " + ((trackQuality >= 50) ? std::to_string(this->distanceTo(player)) : "TBD") + ".";
+	output += "Altitude: " + (trackQuality >= 70) ? (this->flyingLow ? "Low" : "High") : "TBD";
+	return output;
 }
 
 void FlyingActor::move() {

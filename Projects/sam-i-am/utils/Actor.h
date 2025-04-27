@@ -2,8 +2,6 @@
 #define ACTOR_CLASS
 
 #include "sam_types.h" //types
-#include <string>
-
 
 class Actor {
 protected:
@@ -17,6 +15,7 @@ public:
 	Actor(const SharedBoard&, int, int, std::string, char);
 	char getContact();
 	std::string toString();
+	double distanceTo(std::shared_ptr<Actor>);
 	virtual ~Actor() = default; //deconstructor for subclass(es?)
 	virtual void move();
 };
