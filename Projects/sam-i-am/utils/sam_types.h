@@ -1,6 +1,4 @@
-#ifndef SAM_TYPES
-#define SAM_TYPES
-
+#pragma once
 #include <vector>
 #include <memory>
 #include <string>
@@ -13,22 +11,17 @@ using SharedBoard = std::shared_ptr<Board>;
 enum Bearing { North, East, South, West, Northwest, Northeast, Southeast, Southwest };
 enum Faction { Neutral, Enemy, Friendly };
 enum ActorType { Player, Mobile, City };
-enum TrackQuality { Perfect = 100, Good = 80, Decent = 50, Bad = 20}; //placeholder values
+enum TrackQuality { Perfect = 100, Good = 75, Decent = 50, Bad = 25}; //placeholder values
 
-struct SAM {
+struct PlayerParams {
 	std::string label;
 	int range;
 	int launchDelay;
 };
 
-struct Aircraft {
+struct AircraftParams {
 	std::string label;
 	int speed;
 	bool flyingLow;
 	bool attacks = false;
 };
-
-
-
-
-#endif // !SAM_TYPES
