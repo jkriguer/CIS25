@@ -1,15 +1,15 @@
-#include "Actor.h" //header
-#include "sam_utils.h" //getNewContactNumber
+#include "Actor.h"
+#include "sam_utils.h"
 
-using namespace SAMUTIL;
+using namespace SAM;
 
 //constructors
-Actor::Actor(ActorType aT, const SharedBoard& b, std::string l, char c) : board(b) {
+Actor::Actor(ActorType aT, std::string l, char c) {
 	this->mapIcon = c;
 	this->label = l;
 }
 
-Actor::Actor(const SharedBoard& board, Aircraft a, Bearing b) : Actor(ActorType::Mobile, board, "UFO", '?') {
+Actor::Actor(AircraftParams a, Bearing b) : Actor(ActorType::Mobile, "UFO", '?') {
 	this->mapIcon = getNewContactNumber();
 	this->label = a.label;
 	this->flyingLow = a.flyingLow;
@@ -27,24 +27,19 @@ bool Actor::setCoords(int x, int y) {
 	this->y = y;
 	return true;
 }
+Faction Actor::getFaction() {
+	return this->faction;
+}
+ActorType Actor::getActorType() {
+	return this->actorType;
+}
+std::pair<int, int> Actor::getCoords() {
+	
+	return std::pair<int, int>(this->x, this->y);
+}
 //other methods
 std::string Actor::toString() {
-	return label + " (" + std::to_string(x) + ", " + std::to_string(y) + ")";
-}
-
-
-
-std::string Actor::toString(std::shared_ptr<Actor> player) {
-	std::string output = "Track #" + std::to_string(getMapIcon()) + ", ";
-	output += ((trackQuality >= 90) ? factionToStr(this->faction) : "Unknown") + ". ";
-	output += "Bearing: " + ((trackQuality >= 25) ? bearingToStr(this->bearing) : "TBD") + ". ";
-	output += "Range: " + ((trackQuality >= 50) ? std::to_string(this->distanceTo(player)) : "TBD") + ".";
-	output += "Altitude: " + (trackQuality >= 70) ? (this->flyingLow ? "Low" : "High") : "TBD";
-	return output;
-}
-
-double Actor::distanceTo(std::shared_ptr<Actor> a) {
-	return pow((this->x - a->x), 2) + pow((this->y - a->x), 2);
+	return label + " (" + std::to_string(this->x) + ", " + std::to_string(this->y) + ")";
 }
 
 void Actor::move() {
@@ -56,8 +51,7 @@ void Actor::move() {
 
 	//TODO check for boundaries
 	//TODO also check destination is empty
-
-	(*board)[xNew][yNew] = std::move((*board)[this->x][this->y]); //actually move
+	setCell(xNew, yNew, std::move(getCell(this->x, this->y)));//actually move
 	this->x = xNew;
 	this->y = yNew;
 }

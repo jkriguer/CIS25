@@ -1,12 +1,9 @@
-#ifndef ACTOR_CLASS
-#define ACTOR_CLASS
-
+#pragma once
 #include "sam_types.h" //types
 
 class Actor {
 protected:
 	ActorType actorType;
-	const SharedBoard board;
 	int x = -1; //changed after construction
 	int y = -1; //changed after construction
 	std::string label = "Unnamed Actor";
@@ -17,14 +14,14 @@ protected:
 	Bearing bearing = Bearing::North;
 	bool flyingLow = true;
 public:
-	Actor(ActorType, const SharedBoard&, std::string, char); //stationary
-	Actor(const SharedBoard&, Aircraft, Bearing); //mobile
+	Actor(ActorType, std::string, char); //stationary
+	Actor(AircraftParams, Bearing); //mobile
 	char getMapIcon();
 	bool setCoords(int, int);
+	std::pair<int, int> getCoords();
+	Faction getFaction();
+	ActorType getActorType();
 	std::string toString();
-	std::string toString(std::shared_ptr<Actor>);
 	double distanceTo(std::shared_ptr<Actor>);
 	void move();
 };
-
-#endif // !ACTOR
