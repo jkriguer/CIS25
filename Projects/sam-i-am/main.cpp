@@ -3,46 +3,42 @@
 #include "utils/Actor.h"
 #include "utils/scanner.h"
 
-using namespace SAMUTIL;
+using namespace SAM;
 
 int main() {
+	const int X_MAX = 60; //board X size
+	const int Y_MAX = 36; //board y size
 
-	const int X_MAX = 40; //board X size
-	const int Y_MAX = 60; //board y size
+	initBoard(X_MAX, Y_MAX);
 
-	SAM missileArchetypes[]{ //"character select"
-	SAM("SA-2", 16, 1),
-	SAM("SA-3", 10, 0),
-	SAM("SA-4", 20, 3)
-	}; 
+	using std::cout;
 
-	SharedBoard gameBoard = std::make_shared<Board>(Y_MAX);
-	for (auto& row : *gameBoard) { //avoid copying unique pointers this way
-		row.resize(X_MAX);
-	}
+	/*PlayerParams missileArchetypes[]{ //"character select"
+		PlayerParams("SA-2", 16, 1),
+		PlayerParams("SA-3", 10, 0),
+		PlayerParams("SA-4", 20, 3)
+	};*/
 
 	srand((int)time(nullptr)); //RNG seeded
-
 	//place player and 2 cities
-	makeAndPlace(Player, gameBoard, "Battery", 'B', 16, 22);
-	makeAndPlace(City, gameBoard, "City 1", 'C', 13, 18);
-	makeAndPlace(City, gameBoard, "City 2", 'C', 20, 24);
-
+	int playerX = 26, playerY = 22;
+	makeAndPlace(Player, "Battery", 'B', playerX, playerY);
+	makeAndPlace(City, "City 1", 'C', 23, 18);
+	makeAndPlace(City, "City 2", 'C', 30, 24);
 	//place 2 friendlies
-	makeAndPlace(gameBoard, getArchetype(Friendly, 1), South, 26, 1);
-	makeAndPlace(gameBoard, getArchetype(Friendly, 1), South, 25, 2);
-
+	makeAndPlace(getArchetype(Friendly, 1), South, 26, 1);
+	makeAndPlace(getArchetype(Friendly, 1), South, 25, 2);
 	//place 2 neutrals
-	makeAndPlace(gameBoard, getArchetype(Neutral), East, 10, 10);
-	makeAndPlace(gameBoard, getArchetype(Neutral), Northeast, 20, 20);
-
-
-	printUI("Test title", drawBoard(gameBoard), "Test options");
-	std::cout << (*gameBoard)[1][26]->toString();
-	(*gameBoard)[1][1]->move();
-	printUI("Test title", drawBoard(gameBoard), "Test options");
-	std::cout << (*gameBoard)[Y_MAX / 2][X_MAX / 2]->toString() << '\n';
-	std::cout << (*gameBoard)[1][1]->toString() << '\n';
-
+	makeAndPlace(getArchetype(Neutral), East, 10, 10);
+	makeAndPlace(getArchetype(Neutral), Northeast, 50, 20);
+	//place 1 enemy
+	makeAndPlace(getArchetype(Enemy, 1), West, 16, 10);
+	//test UI
+	std::string title = "Lorem ipsum dolor sit amet";
+	std::string options = "consectetur adipiscing elit";
+	//printUI(title, drawBoard(gameBoard), listContacts(gameBoard, testCoord), options); //known good
+	printUI(title, drawBoard(), listContacts(getUnitList()), options);
+	moveUnits(getUnitList());
+	printUI(title, drawBoard(), listContacts(getUnitList()), options);
 	return 0;
 }
