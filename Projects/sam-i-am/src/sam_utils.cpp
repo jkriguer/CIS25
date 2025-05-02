@@ -3,22 +3,6 @@
 #include <iostream> 
 #include <unordered_map>
 
-const std::vector<char> SAM::defaultScenario{
-10,//validator
-3, //static count
-2, 23, 18, //city 1
-0, 26, 22, //player
-2, 30, 18, //city 2
-5, //mobile count
-2, 1, 0, 26, 1, //friendly 1
-0, -1, 3, 49, 20, //neutral 2
-1, 1, 0, 16, 10, //hostile 1
-2, 1, 0, 25, 2, //friendly 2
-0, -1, 1, 10, 10, //neutral 1
--10 //exit validator
-};
-
-
 char SAM::getNewContactNumber() {
     static int count = 0;
     return '0' + (count++ % 10);
