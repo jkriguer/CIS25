@@ -6,15 +6,6 @@
 
 namespace SAM {
 
-    SharedBoard board;
-
-    void initBoard(int x, int y) {
-        board = std::make_shared<Board>(y);
-        for (auto& row : *board) { //avoid copying unique pointers this way
-            row.resize(x);
-        }
-    }
-
     char getNewContactNumber() {
         static int count = 0;
         return '0' + (count++ % 10);
@@ -50,35 +41,7 @@ namespace SAM {
         return vec.at(index);
     }
 
-    std::vector<std::string> drawBoard() {
-        std::vector<std::string> output;
-        int x = (*board)[0].size();
-        int y = (*board).size();
 
-        for (int i = y - 1; i >= 0; i--) {
-            std::string line = "";
-            line += (i + 1 < 10 ? " " : "") + std::to_string(i + 1) + ' ';
-            for (int j = 0; j < x; j++) {
-                if ((*board)[i][j]) {
-                    line += getCell(j, i)->getMapIcon();
-                }
-                else {
-                    line += '.';
-                }
-                line += ' ';
-            }
-            output.push_back(line);
-        }
-        std::string xAxisTen = "   ";
-        std::string xAxisOne = "   ";
-        for (int i = 1; i <= x; i++) {
-            xAxisTen += std::to_string(i / 10) + ' ';
-            xAxisOne += std::to_string(i % 10) + ' ';
-        }
-        output.push_back(xAxisTen);
-        output.push_back(xAxisOne);
-        return output;
-    }
 
     void printUI(std::string titleState, std::vector<std::string> visualDisplay, std::vector<std::string> contacts, std::string options) {
         using std::cout;
@@ -114,21 +77,21 @@ namespace SAM {
     std::pair<int, int> getBearingMods(Bearing b) { //conceals ugly switching logic
         switch (b) {
             case Bearing::North:
-                return { 0, -1 };
+                return { 0, 1 };
             case Bearing::East:
                 return { 1, 0 };
             case Bearing::South:
-                return { 0, 1 };
+                return { 0, -1 };
             case Bearing::West:
                 return { -1, 0 };
             case Bearing::Northwest:
-                return { -1, -1 };
-            case Bearing::Northeast:
-                return { 1, -1 };
-            case Bearing::Southeast:
-                return { 1, 1 };
-            case Bearing::Southwest:
                 return { -1, 1 };
+            case Bearing::Northeast:
+                return { 1, 1 };
+            case Bearing::Southeast:
+                return { 1, -1 };
+            case Bearing::Southwest:
+                return { -1, -1 };
             default:
                 return { 0, 0 };
         }
@@ -170,65 +133,7 @@ namespace SAM {
         }
     }
 
-    std::vector<std::pair<int, int>> getUnitList() {
-        int x = (*board)[0].size();
-        int y = (*board).size();
-
-        std::vector<std::pair<int, int>> output;
-        for (int i = 0; i < x; i++) {
-            for (int j = 0; j < y; j++) {
-                if (getCell(i, j)) {
-                    output.push_back({ i, j });
-                }
-            }
-        }
-        return output;
-    }
-
-    bool makeAndPlace(ActorType aT, std::string label, char c, int x, int y) {
-        if (getCell(x, y)) { //fail if cell occupied
-            return false;
-        }
-        setCell(x, y, std::make_unique<Actor>(aT,label, c));
-        getCell(x, y)->setCoords(x, y);
-        return true; //success
-    }
-
-    bool makeAndPlace(AircraftParams role, Bearing b, int x, int y) {
-        if (getCell(x, y)) { //fail if cell occupied
-            return false;
-        }
-        setCell(x, y, std::make_unique<Actor>(role, b));
-        getCell(x, y)->setCoords(x, y);
-        return true; //success
-    }
-
-    void clear() {
+    void clearTerm() {
         printf("\033c"); //better than using defs to decide to system(clear)/system(cls)
-    }
-
-    std::unique_ptr<Actor>& getCell(int x, int y) {
-        return (*board)[y][x];
-    }
-
-    void setCell(int x, int y, std::unique_ptr<Actor> a) {
-        getCell(x, y) = std::move(a);
-    }
-
-    void moveUnits(std::vector<std::pair<int, int>> units) {
-        for (const auto& [x, y] : units) {
-            if (getCell(x, y)->getActorType() == ActorType::Mobile) {
-                getCell(x, y)->move();
-                std::cout << "Debug: moved unit at " << x << ", " << y << '\n';
-            }
-        }
-    }
-
-    std::vector<std::string> listContacts(std::vector<std::pair<int, int>> units) {
-        std::vector<std::string> output{ "Contacts:" };
-        for (const auto& [x, y] : units) {
-            output.push_back(getCell(x, y)->toString());
-        }
-        return output;
     }
 }

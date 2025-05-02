@@ -1,6 +1,10 @@
 #pragma once
 #include "sam_types.h" //types
 
+namespace SAM {
+	class Game; //forward dec
+}
+
 class Actor {
 protected:
 	ActorType actorType;
@@ -23,5 +27,6 @@ public:
 	ActorType getActorType();
 	std::string toString();
 	double distanceTo(std::shared_ptr<Actor>);
-	void move();
+	void move(SAM::Game&);
+	virtual ~Actor();
 };

@@ -1,44 +1,35 @@
 #include <iostream>
 #include "utils/sam_utils.h"
 #include "utils/Actor.h"
+#include "utils/Game.h"
 #include "utils/scanner.h"
 
-using namespace SAM;
+
 
 int main() {
-	const int X_MAX = 60; //board X size
-	const int Y_MAX = 36; //board y size
-
-	initBoard(X_MAX, Y_MAX);
-
+	using namespace SAM;
 	using std::cout;
+	Game game;
+	//Scenario defaultScenario(1U, 26, 22, 2, {23, 18, 30, 24}, 2, {26, 1, 2, 25, 2, 2}, ));
 
-	/*PlayerParams missileArchetypes[]{ //"character select"
-		PlayerParams("SA-2", 16, 1),
-		PlayerParams("SA-3", 10, 0),
-		PlayerParams("SA-4", 20, 3)
-	};*/
-
-	srand((int)time(nullptr)); //RNG seeded
+	srand((unsigned int)time(nullptr)); //RNG seeded
 	//place player and 2 cities
-	int playerX = 26, playerY = 22;
-	makeAndPlace(Player, "Battery", 'B', playerX, playerY);
-	makeAndPlace(City, "City 1", 'C', 23, 18);
-	makeAndPlace(City, "City 2", 'C', 30, 24);
+	game.makeAndPlace(Player, "Battery", 'B', 26, 22);
+	game.makeAndPlace(City, "City 1", 'C', 23, 18);
+	game.makeAndPlace(City, "City 2", 'C', 30, 24);
 	//place 2 friendlies
-	makeAndPlace(getArchetype(Friendly, 1), South, 26, 1);
-	makeAndPlace(getArchetype(Friendly, 1), South, 25, 2);
+	game.makeAndPlace(getArchetype(Friendly, 1), South, 26, 1);
+	game.makeAndPlace(getArchetype(Friendly, 1), South, 25, 2);
 	//place 2 neutrals
-	makeAndPlace(getArchetype(Neutral), East, 10, 10);
-	makeAndPlace(getArchetype(Neutral), Northeast, 50, 20);
+	game.makeAndPlace(getArchetype(Neutral), East, 10, 10);
+	game.makeAndPlace(getArchetype(Neutral), Northeast, 49, 20);
 	//place 1 enemy
-	makeAndPlace(getArchetype(Enemy, 1), West, 16, 10);
+	game.makeAndPlace(getArchetype(Enemy, 1), West, 16, 10);
 	//test UI
 	std::string title = "Lorem ipsum dolor sit amet";
 	std::string options = "consectetur adipiscing elit";
-	//printUI(title, drawBoard(gameBoard), listContacts(gameBoard, testCoord), options); //known good
-	printUI(title, drawBoard(), listContacts(getUnitList()), options);
-	moveUnits(getUnitList());
-	printUI(title, drawBoard(), listContacts(getUnitList()), options);
+	printUI(title, game.drawBoard(), game.listContacts(game.getUnitList()), options);
+	game.moveUnits(game.getUnitList());
+	printUI(title, game.drawBoard(), game.listContacts(game.getUnitList()), options);
 	return 0;
 }
