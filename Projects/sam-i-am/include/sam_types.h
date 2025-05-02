@@ -33,22 +33,6 @@ struct OptionalRules {
 	bool endNeutralKill; //game over if neutral unit killed
 };
 
-struct Scenario {
-	unsigned char validBegin;
-	int x;
-	int y;
-	int cityCount;
-	std::vector<int> cityData;
-	int friendlyCount;
-	std::vector<int> friendlyData;
-	int enemyCount;
-	std::vector<int> enemyData;
-	int neutralCount;
-	std::vector<int> neutralData;
-	OptionalRules rules;
-	unsigned char validEnd;
-};
-
 struct Coord {
 	int x;
 	int y;

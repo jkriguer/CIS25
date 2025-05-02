@@ -1,7 +1,6 @@
 #include "../include/Actor.h"
 #include "../include/sam_utils.h"
 #include "../include/Game.h"
-#include <utility> //std::move
 #include <iostream> //debug
 
 using namespace SAM;
@@ -27,8 +26,7 @@ char Actor::getMapIcon() {
 	return this->mapIcon;
 }
 
-bool Actor::setCoords(Coord c) {
-	//TODO check for collision and return false
+bool Actor::setActorCoords(Coord c) {
 	this->x = c.x;
 	this->y = c.y;
 	return true;
@@ -40,8 +38,7 @@ ActorType Actor::getActorType() {
 	return this->actorType;
 }
 Coord Actor::getCoords() {
-	
-	return { x, y };
+	return Coord(x, y);
 }
 //other methods
 std::string Actor::toString() {
@@ -49,21 +46,21 @@ std::string Actor::toString() {
 }
 
 void Actor::move(SAM::Game& g) {
-	auto [xMod, yMod] = getBearingMods(this->bearing); //goodbye switch blob!
+	Coord step = getBearingMods(this->bearing); //goodbye switch blob!
 
-	int xNew = this->x + (xMod * this->speed);
-	int yNew = this->y + (yMod * this->speed);
+	int xStep = this->x + (step.x * this->speed);
+	int yStep = this->y + (step.y * this->speed);
 
-	if (xNew < 0 || xNew >= g.getWidth() || yNew < 0 || yNew >= g.getHeight()) { //if actor leaves map 
+	if (xStep < 0 || xStep >= g.getWidth() || yStep < 0 || yStep >= g.getHeight()) { //if actor leaves map 
 		std::cout << "Debug: moved off map!\n";
 		g.getCell(this->x, this->y).reset(); //destroy it
 		return;
 	}
 
 	//TODO also check destination is empty
-	g.setCell(xNew, yNew, std::move(g.getCell(this->x, this->y)));//actually move
-	this->x = xNew;
-	this->y = yNew;
+	g.setCell(xStep, yStep, std::move(g.getCell(this->x, this->y)));//actually move
+	this->x = xStep;
+	this->y = yStep;
 }
 
 Actor::~Actor() {

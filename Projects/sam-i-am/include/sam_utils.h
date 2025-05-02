@@ -2,7 +2,7 @@
 #include "../include/sam_types.h" //types
 
 namespace SAM {
-
+	extern const std::vector<char> defaultScenario;
 	char getNewContactNumber();
 	AircraftParams getArchetype(Faction, int = -1);
 	void printUI(std::string, std::vector<std::string>, std::vector<std::string>, std::string);

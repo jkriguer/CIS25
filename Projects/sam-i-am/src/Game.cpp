@@ -1,4 +1,5 @@
 #include "../include/Game.h"
+#include "../include/sam_utils.h"
 #include <iostream>
 
 SAM::Game::Game() {
@@ -8,10 +9,6 @@ SAM::Game::Game() {
     }
     status = Running; //start game
 }
-
-SAM::Game::Game(Scenario) {
-    //TODO
-};
 
 int SAM::Game::getWidth() {
     return DIM_X;
@@ -62,19 +59,19 @@ void SAM::Game::setCell(int x, int y, std::unique_ptr<Actor> a) {
     getCell(x, y) = std::move(a);
 }
 
-void SAM::Game::moveUnits(std::vector<Coord> units) {
-    for (const auto& [x, y] : units) {
-        if (getCell(x, y)->getActorType() == ActorType::Mobile) {
-            getCell(x, y)->move(*this);
-            std::cout << "Debug: moved unit at " << x << ", " << y << '\n';
+void SAM::Game::moveUnits(const std::vector<Coord>& units) {
+    for (const Coord& c : units) {
+        if (getCell(c.x, c.y)->getActorType() == ActorType::Mobile) {
+            getCell(c.x, c.y)->move(*this);
+            std::cout << "Debug: moved unit at " << c.x << ", " << c.y << '\n';
         }
     }
 }
 
-std::vector<std::string> SAM::Game::listContacts(std::vector<Coord> units) {
+std::vector<std::string> SAM::Game::listContacts(const std::vector<Coord>& units) {
     std::vector<std::string> output{ "Contacts:" };
-    for (const auto& [x, y] : units) {
-        output.push_back(getCell(x, y)->toString());
+    for (const Coord& c : units) {
+        output.push_back(getCell(c.x, c.y)->toString());
     }
     return output;
 }
@@ -96,7 +93,7 @@ bool SAM::Game::makeAndPlace(ActorType aT, std::string label, char c, int x, int
         return false;
     }
     setCell(x, y, std::make_unique<Actor>(aT, label, c));
-    getCell(x, y)->setCoords({x, y});
+    getCell(x, y)->setActorCoords({x, y});
     return true; //success
 }
 
@@ -105,6 +102,41 @@ bool SAM::Game::makeAndPlace(Faction f, AircraftParams role, Bearing b, int x, i
         return false;
     }
     setCell(x, y, std::make_unique<Actor>(f, role, b));
-    getCell(x, y)->setCoords({x, y});
+    getCell(x, y)->setActorCoords({x, y});
     return true; //success
+}
+
+Status SAM::Game::getStatus() {
+    return this->status;
+}
+
+bool SAM::Game::loadScenario(const std::vector<char>& s) {
+    if (s[0] != SAVE_VERSION || s[s.size() - 1] != -SAVE_VERSION) { //check validators 
+        throw std::runtime_error("Illegal scenario: invalid validator(s)");
+        return false;
+    }
+    int index = 0; //read head
+    index++; //skip validator
+    int fixedCount = s[index++]; //number of fixed actors
+    int nextCity = 1; //city label iterator
+    for (int i = 0; i < fixedCount; i++) {
+        ActorType type = ActorType(s[index++]);
+        int x = s[index++];
+        int y = s[index++];
+        std::string label = (type == Player) ? "Battery" : "City " + std::to_string(nextCity++);
+        makeAndPlace(type, label, label[0], x, y);
+    }
+    if (nextCity == 1 || nextCity > fixedCount) { //if all fixed actors are cities or none of them are
+        throw std::runtime_error("Illegal scenario: player or cities not placed");
+    }
+    int mobileCount = s[index++];
+    for (int i = 0; i < mobileCount; i++) {
+        Faction f = (Faction)s[index++];
+        int archetype = s[index++]; //archetype lookup index
+        Bearing b = (Bearing)s[index++];
+        int x = s[index++];
+        int y = s[index++];
+        makeAndPlace(f, getArchetype(f, archetype), b, x, y);
+    }
+    return true;
 }

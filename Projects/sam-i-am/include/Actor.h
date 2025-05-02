@@ -22,7 +22,7 @@ public:
 	Actor(ActorType, std::string, char); //stationary
 	Actor(Faction, AircraftParams, Bearing); //mobile
 	char getMapIcon();
-	bool setCoords(Coord);
+	bool setActorCoords(Coord);
 	Coord getCoords();
 	Faction getFaction();
 	ActorType getActorType();
