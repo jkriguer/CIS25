@@ -4,10 +4,8 @@
 #include <memory>
 
 namespace SAM {
-
 	class Game {
 	private:
-		const char SAVE_VERSION = static_cast<char>(10); //save version
 		const int DIM_X = 50; //board width
 		const int DIM_Y = 30; //board height
 		Board board;
