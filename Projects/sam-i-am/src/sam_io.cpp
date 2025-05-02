@@ -1,11 +1,13 @@
 #include "../include/sam_io.h"
 #include <fstream>
 #include <filesystem>
+#include <iostream> //debug
 
 const char SAM::SAVE_VERSION = 10;
 
 bool SAM::writeScenario(const std::string& file, const std::vector<char>& scenario) {
 	std::filesystem::path path = std::filesystem::path("scenarios") / file; //set path
+	std::filesystem::create_directories(path.parent_path()); //makes scenarios folder in build dir as workaround
 	std::ofstream out(path, std::ios::binary); //handle opened
 	if (!out.is_open()) {
 		return false; //file couldn't be opened
@@ -17,6 +19,7 @@ bool SAM::writeScenario(const std::string& file, const std::vector<char>& scenar
 		}
 	}
 	out.close(); //handle closed
+	std::cout << "Debug: scenario written to " << path << '\n';
 	return true;
 }
 
@@ -31,5 +34,6 @@ bool SAM::readScenario(const std::string& file, std::vector<char>& scenario) {
 		scenario.push_back(byte); //read one char at a time
 	}
 	in.close(); //handle closed
+	std::cout << "Debug: scenario read from " << path << '\n';
 	return true;
 }
