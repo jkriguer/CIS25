@@ -18,6 +18,7 @@ file(GLOB SOURCES "src/*.cpp")
 
 # path
 add_compile_definitions(SCENARIOS_DIR="${CMAKE_SOURCE_DIR}/scenarios")
+add_compile_definitions(LOGS_DIR="${CMAKE_SOURCE_DIR}/logs")
 
 # Main executable
 add_executable(SAM-I-AM
