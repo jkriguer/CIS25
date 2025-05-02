@@ -7,7 +7,7 @@ class Actor; //forward dec
 
 using Board = std::vector<std::vector<std::unique_ptr<Actor>>>;
 
-enum Bearing { North, East, South, West, Northwest, Northeast, Southeast, Southwest };
+enum Bearing { North, Northeast, East, Southeast, South, Southwest, West, Northwest };
 enum Faction { Neutral, Enemy, Friendly };
 enum ActorType { Player, Mobile, City };
 enum TrackQuality { Perfect = 100, Good = 75, Decent = 50, Bad = 25}; //placeholder values
