@@ -13,22 +13,24 @@ Actor::Actor(ActorType aT, std::string l, char c) {
 	this->label = l;
 }
 
-Actor::Actor(AircraftParams a, Bearing b) : Actor(ActorType::Mobile, "UFO", '?') {
+Actor::Actor(Faction f, AircraftParams a, Bearing b) : Actor(ActorType::Mobile, "UFO", '?') {
+	this->faction = f;
 	this->mapIcon = getNewContactNumber();
 	this->label = a.label;
 	this->flyingLow = a.flyingLow;
 	this->speed = a.speed;
 	this->bearing = b;
+	this->attacks = a.attacks;
 }
 //setters and getters
 char Actor::getMapIcon() {
 	return this->mapIcon;
 }
 
-bool Actor::setCoords(int x, int y) {
+bool Actor::setCoords(Coord c) {
 	//TODO check for collision and return false
-	this->x = x;
-	this->y = y;
+	this->x = c.x;
+	this->y = c.y;
 	return true;
 }
 Faction Actor::getFaction() {
@@ -37,9 +39,9 @@ Faction Actor::getFaction() {
 ActorType Actor::getActorType() {
 	return this->actorType;
 }
-std::pair<int, int> Actor::getCoords() {
+Coord Actor::getCoords() {
 	
-	return std::pair<int, int>(this->x, this->y);
+	return { x, y };
 }
 //other methods
 std::string Actor::toString() {

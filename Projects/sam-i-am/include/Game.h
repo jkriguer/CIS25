@@ -21,14 +21,14 @@ namespace SAM {
 		Status getStatus();
 		std::unique_ptr<Actor>& getCell(int, int);
 		void setCell(int, int, std::unique_ptr<Actor>);
-		void moveUnits(std::vector<std::pair<int, int>>);
-		std::vector<std::string> listContacts(std::vector<std::pair<int, int>>);
+		void moveUnits(std::vector<Coord>);
+		std::vector<std::string> listContacts(std::vector<Coord>);
 		bool inBounds(int, int);
 		int getWidth();
 		int getHeight();
-		std::vector<std::pair<int, int>> getUnitList();
+		std::vector<Coord> getUnitList();
 		bool makeAndPlace(ActorType, std::string, char, int, int);
-		bool makeAndPlace(AircraftParams, Bearing, int, int);
+		bool makeAndPlace(Faction, AircraftParams, Bearing, int, int);
 
 	};
 

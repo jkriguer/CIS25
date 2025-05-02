@@ -73,7 +73,7 @@ namespace SAM {
         }
     }
 
-    std::pair<int, int> getBearingMods(Bearing b) { //conceals ugly switching logic
+    Coord getBearingMods(Bearing b) { //conceals ugly switching logic
         switch (b) {
             case Bearing::North:
                 return { 0, 1 };

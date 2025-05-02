@@ -11,22 +11,22 @@ protected:
 	int x = -1; //changed after construction
 	int y = -1; //changed after construction
 	std::string label = "Unnamed Actor";
-	char mapIcon = '?';
-	Faction faction;
-	double trackQuality; //from 0.0 (unidentified) to 1.0 (fully identified)
+	char mapIcon;
+	Faction faction = Neutral;
+	double trackQuality = 0.0; //from 0.0 (unidentified) to 1.0 (fully identified)
 	int speed = 0; //in tiles per turn
 	Bearing bearing = Bearing::North;
-	bool flyingLow = true;
+	bool flyingLow = true; //TODO modifies range to hit
+	bool attacks = false; //does actor attack other actors?
 public:
 	Actor(ActorType, std::string, char); //stationary
-	Actor(AircraftParams, Bearing); //mobile
+	Actor(Faction, AircraftParams, Bearing); //mobile
 	char getMapIcon();
-	bool setCoords(int, int);
-	std::pair<int, int> getCoords();
+	bool setCoords(Coord);
+	Coord getCoords();
 	Faction getFaction();
 	ActorType getActorType();
 	std::string toString();
-	double distanceTo(std::shared_ptr<Actor>);
 	void move(SAM::Game&);
 	virtual ~Actor();
 };

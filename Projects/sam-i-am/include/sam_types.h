@@ -48,3 +48,8 @@ struct Scenario {
 	OptionalRules rules;
 	unsigned char validEnd;
 };
+
+struct Coord {
+	int x;
+	int y;
+};

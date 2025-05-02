@@ -62,7 +62,7 @@ void SAM::Game::setCell(int x, int y, std::unique_ptr<Actor> a) {
     getCell(x, y) = std::move(a);
 }
 
-void SAM::Game::moveUnits(std::vector<std::pair<int, int>> units) {
+void SAM::Game::moveUnits(std::vector<Coord> units) {
     for (const auto& [x, y] : units) {
         if (getCell(x, y)->getActorType() == ActorType::Mobile) {
             getCell(x, y)->move(*this);
@@ -71,7 +71,7 @@ void SAM::Game::moveUnits(std::vector<std::pair<int, int>> units) {
     }
 }
 
-std::vector<std::string> SAM::Game::listContacts(std::vector<std::pair<int, int>> units) {
+std::vector<std::string> SAM::Game::listContacts(std::vector<Coord> units) {
     std::vector<std::string> output{ "Contacts:" };
     for (const auto& [x, y] : units) {
         output.push_back(getCell(x, y)->toString());
@@ -79,8 +79,8 @@ std::vector<std::string> SAM::Game::listContacts(std::vector<std::pair<int, int>
     return output;
 }
 
-std::vector<std::pair<int, int>> SAM::Game::getUnitList() {
-    std::vector<std::pair<int, int>> output;
+std::vector<Coord> SAM::Game::getUnitList() {
+    std::vector<Coord> output;
     for (int i = 0; i < DIM_X; i++) {
         for (int j = 0; j < DIM_Y; j++) {
             if (getCell(i, j)) {
@@ -96,15 +96,15 @@ bool SAM::Game::makeAndPlace(ActorType aT, std::string label, char c, int x, int
         return false;
     }
     setCell(x, y, std::make_unique<Actor>(aT, label, c));
-    getCell(x, y)->setCoords(x, y);
+    getCell(x, y)->setCoords({x, y});
     return true; //success
 }
 
-bool SAM::Game::makeAndPlace(AircraftParams role, Bearing b, int x, int y) {
+bool SAM::Game::makeAndPlace(Faction f, AircraftParams role, Bearing b, int x, int y) {
     if (getCell(x, y)) { //fail if cell occupied
         return false;
     }
-    setCell(x, y, std::make_unique<Actor>(role, b));
-    getCell(x, y)->setCoords(x, y);
+    setCell(x, y, std::make_unique<Actor>(f, role, b));
+    getCell(x, y)->setCoords({x, y});
     return true; //success
 }
