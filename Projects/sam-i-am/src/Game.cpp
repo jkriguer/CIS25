@@ -1,5 +1,6 @@
 #include "../include/Game.h"
 #include "../include/sam_utils.h"
+#include "../include/sam_io.h"
 #include <iostream>
 
 SAM::Game::Game() {
@@ -60,6 +61,7 @@ void SAM::Game::setCell(int x, int y, std::unique_ptr<Actor> a) {
 }
 
 void SAM::Game::moveUnits(const std::vector<Coord>& units) {
+    std::vector<Coord> enemy, friendly, neutral;
     for (const Coord& c : units) {
         if (getCell(c.x, c.y)->getActorType() == ActorType::Mobile) {
             getCell(c.x, c.y)->move(*this);
@@ -111,7 +113,7 @@ Status SAM::Game::getStatus() {
 }
 
 bool SAM::Game::loadScenario(const std::vector<char>& s) {
-    if (s[0] != SAVE_VERSION || s[s.size() - 1] != -SAVE_VERSION) { //check validators 
+    if (s[0] != SAM::SAVE_VERSION || s[s.size() - 1] != -SAM::SAVE_VERSION) { //check validators 
         throw std::runtime_error("Illegal scenario: invalid validator(s)");
         return false;
     }

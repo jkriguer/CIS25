@@ -3,7 +3,6 @@
 #include "../include/Game.h"
 #include <iostream> //debug
 
-using namespace SAM;
 
 //constructors
 Actor::Actor(ActorType aT, std::string l, char c) {
@@ -14,7 +13,7 @@ Actor::Actor(ActorType aT, std::string l, char c) {
 
 Actor::Actor(Faction f, AircraftParams a, Bearing b) : Actor(ActorType::Mobile, "UFO", '?') {
 	this->faction = f;
-	this->mapIcon = getNewContactNumber();
+	this->mapIcon = SAM::getNewContactNumber();
 	this->label = a.label;
 	this->flyingLow = a.flyingLow;
 	this->speed = a.speed;
@@ -46,12 +45,12 @@ std::string Actor::toString() {
 }
 
 void Actor::move(SAM::Game& g) {
-	Coord step = getBearingMods(this->bearing); //goodbye switch blob!
+	Coord step = SAM::getBearingMods(this->bearing); //goodbye switch blob!
 
 	int xStep = this->x + (step.x * this->speed);
 	int yStep = this->y + (step.y * this->speed);
 
-	if (xStep < 0 || xStep >= g.getWidth() || yStep < 0 || yStep >= g.getHeight()) { //if actor leaves map 
+	if (!g.inBounds(xStep, yStep)) { //if actor leaves map 
 		std::cout << "Debug: moved off map!\n";
 		g.getCell(this->x, this->y).reset(); //destroy it
 		return;
