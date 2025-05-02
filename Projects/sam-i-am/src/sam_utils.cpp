@@ -133,3 +133,7 @@ std::string SAM::factionToStr(Faction F) {
 void SAM::clearTerm() {
     printf("\033c"); //better than using defs to decide to system(clear)/system(cls)
 }
+
+int SAM::manhattan(Coord src, Coord dst) {
+    return std::abs(src.x - dst.x) + std::abs(src.y - dst.y);
+}

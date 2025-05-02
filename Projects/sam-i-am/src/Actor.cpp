@@ -65,3 +65,31 @@ void Actor::move(SAM::Game& g) {
 Actor::~Actor() {
 	std::cout << "Debug: destroyed!\n";
 }
+
+bool Actor::isBlocked(SAM::Game& g, Coord dst) {
+	if (!g.getCell(dst.x, dst.y)) {
+		return false; //can't be blocked if there's nothing to block
+	}
+	switch (this->getFaction()) {
+		case Enemy:
+			return g.getCell(dst.x, dst.y)->getFaction() == Enemy || //avoid fellow enemies
+				(g.getCell(dst.x, dst.y)->getFaction() == Neutral && //avoid neutrals
+					g.getCell(dst.x, dst.y)->getActorType() != City); //as long as they're mobs
+		case Friendly:
+			return g.getCell(dst.x, dst.y)->getFaction() != Enemy; //avoid anything that isn't enemy
+		default:
+			return true; //avoid interactions regardless
+	}
+}
+
+bool Actor::isValidTarget(SAM::Game& g, Coord dst) {
+	if (g.getCell(dst.x, dst.y)->getFaction() == Enemy) { //if actor is enemy
+		return g.getCell(dst.x, dst.y)->getActorType() == City; //clobber city
+	}
+	if (g.getCell(dst.x, dst.y)->getFaction() == Friendly) { //if actor is friendly
+		g.getCell(dst.x, dst.y)->getFaction() == Enemy; //clobber enemy
+	}
+	else { //otherwise
+		return false; //clobber nothing
+	}
+}

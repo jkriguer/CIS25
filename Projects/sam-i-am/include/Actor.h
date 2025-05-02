@@ -29,4 +29,7 @@ public:
 	std::string toString();
 	void move(SAM::Game&);
 	virtual ~Actor();
+	bool isBlocked(SAM::Game&, Coord);
+	bool isValidTarget(SAM::Game&, Coord);
+
 };

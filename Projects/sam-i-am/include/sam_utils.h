@@ -9,4 +9,5 @@ namespace SAM {
 	std::string bearingToStr(Bearing);
 	std::string factionToStr(Faction);
 	void clearTerm();
+	int manhattan(Coord, Coord);
 }
