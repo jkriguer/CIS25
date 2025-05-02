@@ -1,6 +1,4 @@
-#ifndef scanner_utils
-#define scanner_utils
-
+#pragma once
 #include <iostream>
 #include <limits>
 #include <string>
@@ -10,5 +8,3 @@ int getNextInt();
 double getNextDouble();
 std::string getNextLine();
 std::string getNextLineAlpha();
-
-#endif

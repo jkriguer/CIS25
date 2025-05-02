@@ -1,5 +1,5 @@
 #pragma once
-#include "sam_types.h" //types
+#include "../include/sam_types.h" //types
 
 namespace SAM {
 

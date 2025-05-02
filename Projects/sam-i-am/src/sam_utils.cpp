@@ -1,8 +1,7 @@
-#include "sam_utils.h" 
-
+#include "../include/sam_utils.h"
+#include "../include/Actor.h"
 #include <iostream> 
 #include <unordered_map>
-#include "Actor.h"
 
 namespace SAM {
 

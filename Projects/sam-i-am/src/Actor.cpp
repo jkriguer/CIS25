@@ -1,7 +1,6 @@
-#include "Actor.h"
-#include "sam_utils.h"
-#include "Game.h"
-
+#include "../include/Actor.h"
+#include "../include/sam_utils.h"
+#include "../include/Game.h"
 #include <utility> //std::move
 #include <iostream> //debug
 

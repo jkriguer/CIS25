@@ -1,6 +1,6 @@
 #pragma once
-#include "sam_types.h"
-#include "Actor.h"
+#include "../include/sam_types.h"
+#include "../include/Actor.h"
 #include <memory>
 
 namespace SAM {

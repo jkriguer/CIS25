@@ -1,8 +1,8 @@
 #include <iostream>
-#include "utils/sam_utils.h"
-#include "utils/Actor.h"
-#include "utils/Game.h"
-#include "utils/scanner.h"
+#include "../include/sam_utils.h"
+#include "../include/Actor.h"
+#include "../include/Game.h"
+#include "../include/scanner.h"
 
 
 
