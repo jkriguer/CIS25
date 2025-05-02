@@ -60,13 +60,31 @@ void SAM::Game::setCell(int x, int y, std::unique_ptr<Actor> a) {
     getCell(x, y) = std::move(a);
 }
 
-void SAM::Game::moveUnits(const std::vector<Coord>& units) {
+void SAM::Game::moveAllUnits(const std::vector<Coord>& units) {
     std::vector<Coord> enemy, friendly, neutral;
-    for (const Coord& c : units) {
+    for (const Coord& c : units) { //sort units by faction
         if (getCell(c.x, c.y)->getActorType() == ActorType::Mobile) {
-            getCell(c.x, c.y)->move(*this);
-            std::cout << "Debug: moved unit at " << c.x << ", " << c.y << '\n';
+            switch (getCell(c.x, c.y)->getFaction()) {
+                case Enemy:
+                    enemy.push_back(c);
+                    break;
+                case Friendly:
+                    friendly.push_back(c);
+                    break;
+                case Neutral:
+                    neutral.push_back(c);
+                    break;
+            }
         }
+    }
+    moveUnits(enemy);
+    moveUnits(friendly);
+    moveUnits(neutral);
+}
+
+void SAM::Game::moveUnits(const std::vector<Coord>& units) {
+    for (const Coord& c : units) { //actually move units
+        getCell(c.x, c.y)->move(*this);
     }
 }
 

@@ -17,6 +17,7 @@ namespace SAM {
 		Status getStatus();
 		std::unique_ptr<Actor>& getCell(int, int);
 		void setCell(int, int, std::unique_ptr<Actor>);
+		void moveAllUnits(const std::vector<Coord>&);
 		void moveUnits(const std::vector<Coord>&);
 		std::vector<std::string> listContacts(const std::vector<Coord>&);
 		bool inBounds(int, int);
