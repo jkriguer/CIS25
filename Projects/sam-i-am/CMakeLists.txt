@@ -16,6 +16,9 @@ include_directories(include)
 # Glob (thanks light!)
 file(GLOB SOURCES "src/*.cpp")
 
+# path
+add_compile_definitions(SCENARIOS_DIR="${CMAKE_SOURCE_DIR}/scenarios")
+
 # Main executable
 add_executable(SAM-I-AM
         main.cpp

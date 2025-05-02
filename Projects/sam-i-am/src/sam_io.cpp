@@ -6,7 +6,7 @@
 const char SAM::SAVE_VERSION = 10;
 
 bool SAM::writeScenario(const std::string& file, const std::vector<char>& scenario) {
-	std::filesystem::path path = std::filesystem::path("scenarios") / file; //set path
+	std::filesystem::path path = std::filesystem::path(SCENARIOS_DIR) / file; //set path
 	std::filesystem::create_directories(path.parent_path()); //makes scenarios folder in build dir as workaround
 	std::ofstream out(path, std::ios::binary); //handle opened
 	if (!out.is_open()) {
@@ -24,7 +24,7 @@ bool SAM::writeScenario(const std::string& file, const std::vector<char>& scenar
 }
 
 bool SAM::readScenario(const std::string& file, std::vector<char>& scenario) {
-	std::filesystem::path path = std::filesystem::path("scenarios") / file; //set path
+	std::filesystem::path path = std::filesystem::path(SCENARIOS_DIR) / file; //set path
 	std::ifstream in(path, std::ios::binary); //handle opened
 	if (!in.is_open()) {
 		return false; //file couldn't be opened
