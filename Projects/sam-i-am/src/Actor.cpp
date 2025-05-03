@@ -1,7 +1,6 @@
 #include "../include/Actor.h"
 #include "../include/sam_utils.h"
 #include "../include/Game.h"
-#include <iostream> //debug
 #include <sstream>
 #include <iomanip>
 
@@ -21,7 +20,7 @@ Actor::Actor(Faction f, AircraftParams a, Bearing b) : Actor(ActorType::Mobile, 
 	this->speed = a.speed;
 	this->bearing = b;
 	this->attacks = a.attacks;
-	this->identified = (f == Friendly) ? 0 : 2;
+	this->identified = (f == Friendly) ? 0 : 1;
 }
 //setters and getters
 char Actor::getMapIcon() {
