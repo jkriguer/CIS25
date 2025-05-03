@@ -232,7 +232,7 @@ bool SAM::Game::identify(const SharedActor& tgt) {
         log("ID complete on " + tgt->toString(playerPos));
     }
     else {
-        log(std::to_string(tgt->getID()) + "turns until ID complete on " + tgt->toString(playerPos));
+        log(std::to_string(tgt->getID()) + " turn(s) until " + tgt->toString(playerPos) + " identified.");
     }
     return true;
 }
