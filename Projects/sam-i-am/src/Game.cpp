@@ -77,8 +77,8 @@ void SAM::Game::moveAllUnits(const std::vector<Coord>& units) {
             }
         }
     }
-    moveUnits(friendly);
     moveUnits(enemy);
+    moveUnits(friendly);
     moveUnits(neutral);
 }
 

@@ -15,7 +15,7 @@ namespace SAM {
 		std::vector<std::string> logs;
 		std::vector<Missile> missiles;
 		Coord playerPos; //cached SAM position
-		int cityCount; //for tracking destruction
+		int cityCount = 0; //for tracking destruction
 	public:
 		Game();
 		std::vector<std::string> drawBoard();
