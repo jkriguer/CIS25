@@ -160,3 +160,7 @@ bool SAM::Game::loadScenario(const std::vector<char>& s) {
     }
     return true;
 }
+
+void SAM::Game::log(std::string l) {
+    logs.push_back(l);
+}

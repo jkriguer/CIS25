@@ -1,7 +1,6 @@
 #include "../include/sam_io.h"
 #include <fstream>
 #include <filesystem>
-#include <iostream> //debug
 
 const char SAM::SAVE_VERSION = 10;
 
@@ -18,7 +17,6 @@ bool SAM::writeScenario(const std::string& file, const std::vector<char>& scenar
 		}
 	}
 	out.close(); //handle closed
-	std::cout << "Debug: scenario written to " << path << '\n';
 	return true;
 }
 
@@ -33,6 +31,18 @@ bool SAM::readScenario(const std::string& file, std::vector<char>& scenario) {
 		scenario.push_back(byte); //read one char at a time
 	}
 	in.close(); //handle closed
-	std::cout << "Debug: scenario read from " << path << '\n';
+	return true;
+}
+
+bool SAM::writeLogs(const std::string& file, const std::vector<std::string>& logs) {
+	std::filesystem::path path = std::filesystem::path(LOGS_DIR) / file; //set path
+	std::ofstream out(path); //handle opened
+	if (!out.is_open()) {
+		return false; //file couldn't be opened
+	}
+	for (const auto& line : logs) {
+		out << line << '\n';
+	}
+	out.close(); //handle closed
 	return true;
 }

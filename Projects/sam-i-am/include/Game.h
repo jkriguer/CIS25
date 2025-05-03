@@ -11,6 +11,7 @@ namespace SAM {
 		Board board;
 		Status status{ Running };
 		OptionalRules rules { true, false, true };
+		std::vector<std::string> logs;
 	public:
 		Game();
 		std::vector<std::string> drawBoard();
@@ -27,6 +28,7 @@ namespace SAM {
 		bool makeAndPlace(ActorType, std::string, char, int, int);
 		bool makeAndPlace(Faction, AircraftParams, Bearing, int, int);
 		bool loadScenario(const std::vector<char>&);
+		void log(std::string);
 	};
 
 }
