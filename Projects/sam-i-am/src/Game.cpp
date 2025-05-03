@@ -214,3 +214,34 @@ std::vector<WeakActor> SAM::Game::getMobilePtrs() {
     }
     return out;
 }
+
+bool SAM::Game::identify(const SharedActor& tgt) {
+    if (!tgt) {
+        return false;
+    }
+    bool out = tgt->tickID();
+    if (out) {
+        log("ID in progress on " + tgt->toString(playerPos));
+    }
+    return out;
+}
+
+std::vector<SharedActor> SAM::Game::getUnidentified() {
+    std::vector<SharedActor> out;
+    for (WeakActor w : getMobilePtrs()) {
+        auto s = w.lock();
+        if (!s) {
+             continue;
+        }
+        out.push_back(s);
+    }
+    return out;
+}
+
+Coord SAM::Game::getPlayerPos() {
+    return this->playerPos;
+}
+
+std::vector<std::string> SAM::Game::getLogs() {
+    return this->logs;
+}

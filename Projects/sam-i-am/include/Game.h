@@ -12,10 +12,10 @@ namespace SAM {
 		const int RANGE = 12; //missile range
 		Board board;
 		Status status{ Running };
-		OptionalRules rules{ true, false, true };
 		std::vector<std::string> logs;
 		std::vector<Missile> missiles;
 		Coord playerPos; //cached SAM position
+		int cityCount; //for tracking destruction
 	public:
 		Game();
 		std::vector<std::string> drawBoard();
@@ -36,5 +36,9 @@ namespace SAM {
 		bool launchMissile(const SharedActor&);
 		void tickMissiles();
 		std::vector<WeakActor> getMobilePtrs();
+		bool identify(const SharedActor&);
+		std::vector<SharedActor> getUnidentified();
+		Coord getPlayerPos();
+		std::vector<std::string> getLogs();
 	};
 }
