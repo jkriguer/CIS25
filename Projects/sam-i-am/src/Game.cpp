@@ -91,7 +91,7 @@ void SAM::Game::moveUnits(const std::vector<Coord>& units) {
 std::vector<std::string> SAM::Game::listContacts(const std::vector<Coord>& units) {
     std::vector<std::string> output{ "Contacts:" };
     for (const Coord& c : units) {
-        output.push_back(getCell(c.x, c.y)->toString());
+        output.push_back(getCell(c.x, c.y)->toString(this->playerPos));
     }
     return output;
 }
@@ -173,7 +173,7 @@ bool SAM::Game::launchMissile(const SharedActor& tgt) {
         return false;
     }
     missiles.push_back({ tgt, this->DELAY, this->RANGE });
-    logs.push_back("Launched on " + tgt->toString() + 
+    logs.push_back("Launched on " + tgt->toString(this->playerPos) + 
         ", impact in " + std::to_string(this->DELAY) + " turns.");
     return true;
 }
@@ -194,11 +194,11 @@ void SAM::Game::tickMissiles() {
 
         Coord tgtC = tgt->getCoords();
         if (SAM::manhattan(playerPos, tgtC) < m.maxRange) { //if in range
-            logs.push_back("Missile hit: " + tgt->toString() + " destroyed.");
+            logs.push_back("Missile hit: " + tgt->toString(this->playerPos) + " destroyed.");
             getCell(tgtC.x, tgtC.y).reset(); //destroyed
         }
         else { //target left range
-            logs.push_back("Missile missed: " + tgt->toString() + " evaded.");
+            logs.push_back("Missile missed: " + tgt->toString(this->playerPos) + " evaded.");
         }
         missiles.erase(missiles.begin() + i);
     }

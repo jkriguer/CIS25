@@ -19,6 +19,7 @@ Actor::Actor(Faction f, AircraftParams a, Bearing b) : Actor(ActorType::Mobile, 
 	this->speed = a.speed;
 	this->bearing = b;
 	this->attacks = a.attacks;
+	this->identified = (f == Friendly) ? 0 : 2;
 }
 //setters and getters
 char Actor::getMapIcon() {
@@ -40,8 +41,12 @@ Coord Actor::getCoords() {
 	return Coord(x, y);
 }
 //other methods
-std::string Actor::toString() {
-	return label + " (" + std::to_string(this->x) + ", " + std::to_string(this->y) + ")";
+std::string Actor::toString(Coord p) {
+	if (this->actorType != Mobile) {
+		return this->label + " " + SAM::coordToStr(this->getCoords());
+	}
+	return ((this->identified != 0) ? "Aircraft " : this->label + " ") +
+		getMapIcon() + " " + getBRAS(p);
 }
 
 void Actor::move(SAM::Game& g) {
@@ -62,9 +67,6 @@ void Actor::move(SAM::Game& g) {
 	setActorCoords(Coord(xStep, yStep)); //update internal coords
 }
 
-Actor::~Actor() {
-	std::cout << "Debug: destroyed!\n";
-}
 
 bool Actor::isBlocked(SAM::Game& g, Coord dst) {
 	if (!g.getCell(dst.x, dst.y)) {
@@ -90,4 +92,23 @@ bool Actor::isValidTarget(SAM::Game& g, Coord dst) {
 		return g.getCell(dst.x, dst.y)->getFaction() == Enemy; //clobber enemy
 	}
 	return false; //clobber nothing otherwise
+}
+
+int Actor::getID() {
+	return this->identified;
+}
+
+bool Actor::tickID() {
+	if (identified >= 0) {
+		return false; //already IDed
+	}
+	identified--;
+	return true; //lowered ID req by 1
+}
+
+std::string Actor::getBRAS(Coord player) {
+	return "B " + SAM::bearingToStr(this->bearing) +
+		", R " + std::to_string(SAM::manhattan(getCoords(), player)) +
+		", A " + ((this->flyingLow) ? "Low" : "High") +
+		", S " + std::to_string(this->speed);
 }

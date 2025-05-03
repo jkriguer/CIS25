@@ -137,3 +137,7 @@ void SAM::clearTerm() {
 int SAM::manhattan(Coord src, Coord dst) {
     return std::abs(src.x - dst.x) + std::abs(src.y - dst.y);
 }
+
+std::string SAM::coordToStr(Coord c) {
+    return "(" + std::to_string(c.x) + ", " + std::to_string(c.y) + ")";
+}

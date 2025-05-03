@@ -13,7 +13,7 @@ protected:
 	std::string label = "Unnamed Actor";
 	char mapIcon;
 	Faction faction = Neutral;
-	double trackQuality = 0.0; //from 0.0 (unidentified) to 1.0 (fully identified)
+	int identified = 0; //turns until identified. 0 means fully IDed
 	int speed = 0; //in tiles per turn
 	Bearing bearing = Bearing::North;
 	bool flyingLow = true; //TODO modifies range to hit
@@ -26,9 +26,11 @@ public:
 	Coord getCoords();
 	Faction getFaction();
 	ActorType getActorType();
-	std::string toString();
+	std::string toString(Coord);
 	void move(SAM::Game&);
-	virtual ~Actor();
 	bool isBlocked(SAM::Game&, Coord);
 	bool isValidTarget(SAM::Game&, Coord);
+	int getID();
+	bool tickID();
+	std::string getBRAS(Coord);
 };

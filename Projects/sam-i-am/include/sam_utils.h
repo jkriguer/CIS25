@@ -10,4 +10,5 @@ namespace SAM {
 	std::string factionToStr(Faction);
 	void clearTerm();
 	int manhattan(Coord, Coord);
+	std::string coordToStr(Coord);
 }
