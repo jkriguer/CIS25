@@ -67,7 +67,7 @@ void Actor::move(SAM::Game& g) {
 	int yStep = this->y + (step.y * this->speed);
 
 	if (!g.inBounds(xStep, yStep)) { //if actor leaves map 
-		g.log("Actor left the map. Add more detail.");
+		g.log(this->toString() + " left the map.");
 		g.getCell(this->x, this->y).reset(); //destroy it
 		return;
 	}
