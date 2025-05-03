@@ -28,12 +28,6 @@ struct AircraftParams {
 	bool attacks = false;
 };
 
-struct OptionalRules {
-	bool endOneCity; //game over if one city is destroyed
-	bool endFriendlyKill; //game over if friendly unit killed
-	bool endNeutralKill; //game over if neutral unit killed
-};
-
 struct Coord {
 	int x;
 	int y;
