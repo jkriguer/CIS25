@@ -74,7 +74,7 @@ void Actor::move(SAM::Game& g) {
 	}
 
 	//TODO also check destination is empty
-	g.setCell(xStep, yStep, g.getCell(this->x, this->y));//actually move
+	g.setCell(xStep, yStep, std::move(g.getCell(this->x, this->y)));//actually move
 	g.getCell(this->x, this->y).reset(); //erase last location
 	setActorCoords(Coord(xStep, yStep)); //update internal coords
 }
