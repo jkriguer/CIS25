@@ -41,56 +41,64 @@ int main() {
     Status status = Running;
 
     while (status == Running) {
-        std::string options = "[I]dentify   [S]hoot   [Q]uit";
-        SAM::printUI(title, game.drawBoard(), game.listContacts(game.getUnitList()), options);
-        std::cout << "\nAction? ";
+        bool turn = true; //has player taken their turn?
+
+        std::vector<SharedActor> contacts, filtered;
+        for (Coord c : game.getUnitList()) { //populate list of contacts
+            auto& cell = game.getCell(c.x, c.y);
+            if (cell) {
+                contacts.push_back(cell);
+            }
+        }
+
+        SAM::sortContactsByDistance(contacts, game.getPlayerPos()); //sort list of contacts
+        SAM::printUI(title, game.drawBoard(), game.listContacts(game.getUnitList())); //draw UI
+        std::cout << "\n[I]dentify   [S]hoot   [Q]uit\nEnter an action:  ";
         char input = std::tolower(getNextLineAlpha()[0]);
+
         //decision tree
         if (input == 'i') { //identify
-            std::vector<SharedActor> unknowns = game.getUnidentified();
-            if (unknowns.empty()) {
+            for (auto& contact : contacts) { //split off unidentified actors
+                if (contact->getID() > 0) {
+                    filtered.push_back(contact);
+                }
+            }
+            if (filtered.empty()) {
                 std::cout << "Nothing to identify this turn.\n";
             }
             else {
                 std::cout << "\nUnidentified contacts:\n";
-                for (auto& a : unknowns) {
-                    if (!a) {
-                        continue;
-                    }
-                    std::cout << "  [" << a->getMapIcon() << "] " << a->toString(game.getPlayerPos()) << '\n';
+                for (int i = 0; i < filtered.size(); i++) {
+                    std::cout << " [" << i + 1 << "] " << contacts[i]->toString(game.getPlayerPos()) << '\n';
                 }
-                std::cout << "Pick a contact: ";
-                char icon = std::tolower(getNextLineAlpha()[0]);
-                for (auto& a : unknowns)
-                    if (a && std::tolower(a->getMapIcon()) == icon) {
-                        game.identify(a);
-                        break;
-                    }
+                std::cout << "Pick a contact [#]: ";
+                int choice = getNextInt();
+                if (choice >= 1 && choice <= filtered.size()) {
+                    game.identify(filtered[choice - 1]);
+                    turn = true;
+                }
             }
         }
         else if (input == 's') { //shoot
-            std::vector<SharedActor> targets;
-            for (Coord c : game.getUnitList()) {
-                auto& cell = game.getCell(c.x, c.y);
-                if (cell && cell->getActorType() == Mobile) {
-                    targets.push_back(cell);
+            for (auto& contact : contacts) { //split off mobiles
+                if (contact->getActorType() == Mobile) {
+                    filtered.push_back(contact);
                 }
             }
-            if (targets.empty()) {
+            if (filtered.empty()) {
                 std::cout << "No enemy contacts.\n";
             }
             else {
                 std::cout << "\nEnemy contacts:\n";
-                for (auto& a : targets) {
-                    std::cout << "  [" << a->getMapIcon() << "] " << a->toString(game.getPlayerPos()) << '\n';
+                for (int i = 0; i < filtered.size(); i++) {
+                    std::cout << " [" << i + 1 << "] " << filtered[i]->toString(game.getPlayerPos()) << '\n';
                 }
-                std::cout << "Pick a target: ";
-                char icon = std::tolower(getNextLineAlpha()[0]);
-                for (auto& a : targets)
-                    if (std::tolower(a->getMapIcon()) == icon) {
-                        game.launchMissile(a);
-                        break;
-                    }
+                std::cout << "Pick a contact [#]: ";
+                int choice = getNextInt();
+                if (choice >= 1 && choice <= filtered.size()) {
+                    game.launchMissile(filtered[choice - 1]);
+                    turn = true;
+                }
             }
         }
         else if (input == 'q') { //quit
@@ -105,33 +113,34 @@ int main() {
         game.tickMissiles(); //move missiles
         game.moveAllUnits(game.getUnitList()); //move units
 
-        //check gamestate
-        bool playerAlive = false;
-        bool anyCityAlive = false;
-        bool anyEnemyAlive = false;
-        for (Coord c : game.getUnitList()) {
-            auto cell = game.getCell(c.x, c.y);
-            if (!cell) {
-                continue;
+        if (turn) { //check gamestate if player turn has ended
+            bool playerAlive = false;
+            bool anyCityAlive = false;
+            bool anyEnemyAlive = false;
+            for (Coord c : game.getUnitList()) {
+                auto cell = game.getCell(c.x, c.y);
+                if (!cell) {
+                    continue;
+                }
+                if (cell->getActorType() == Player) {
+                    playerAlive = true;
+                }
+                if (cell->getActorType() == City) {
+                    anyCityAlive = true;
+                }
+                if (cell->getFaction() == Enemy) {
+                    anyEnemyAlive = true;
+                }
             }
-            if (cell->getActorType() == Player) {
-                playerAlive = true;
+            if (!playerAlive || !anyCityAlive) {
+                status = Lost;
             }
-            if (cell->getActorType() == City) {
-                anyCityAlive = true;
+            else if (!anyEnemyAlive) {
+                status = Win;
             }
-            if (cell->getFaction() == Enemy) {
-                anyEnemyAlive = true;
-            }
-        }
-        if (!playerAlive || !anyCityAlive) {
-            status = Lost;
-        }
-        else if (!anyEnemyAlive) {
-            status = Win;
         }
     }
-	SAM::printUI("GAME OVER!", game.drawBoard(), game.listContacts(game.getUnitList()), "");
+	SAM::printUI("GAME OVER!", game.drawBoard(), game.listContacts(game.getUnitList()));
 	std::cout << ((game.getStatus() == Win) ? "You win!\n" : "You lose!\n");
 	SAM::writeLogs("session.log", game.getLogs());
 	return 0;

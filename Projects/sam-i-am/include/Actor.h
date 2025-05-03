@@ -32,5 +32,4 @@ public:
 	bool isValidTarget(SAM::Game&, Coord);
 	int getID();
 	bool tickID();
-	std::string getBRAS(Coord);
 };

@@ -2,6 +2,8 @@
 #include "../include/sam_utils.h"
 #include "../include/Game.h"
 #include <iostream> //debug
+#include <sstream>
+#include <iomanip>
 
 
 //constructors
@@ -42,11 +44,19 @@ Coord Actor::getCoords() {
 }
 //other methods
 std::string Actor::toString(Coord p) {
+	using std::left, std::setw;
 	if (this->actorType != Mobile) {
 		return this->label + " " + SAM::coordToStr(this->getCoords());
 	}
-	return ((this->identified != 0) ? "Aircraft " : this->label + " ") +
-		getMapIcon() + " " + getBRAS(p);
+	std::ostringstream out;
+	std::string displayLabel = ((this->identified != 0) ? "Aircraft " : this->label + ' ') +
+		getMapIcon();
+	std::string displayAlt = (flyingLow) ? "LOW" : "HI";
+	out << setw(12) << left << displayLabel << //name
+		setw(4) << left << SAM::bearingToStr(this->bearing) << //bearing
+		setw(4) << left << SAM::manhattan(getCoords(), p) << //range
+		setw(4) << left << displayAlt << setw(4) << left << this->speed; //alt and speed
+	return out.str();
 }
 
 void Actor::move(SAM::Game& g) {
@@ -104,11 +114,4 @@ bool Actor::tickID() {
 	}
 	identified--;
 	return true; //lowered ID req by 1
-}
-
-std::string Actor::getBRAS(Coord player) {
-	return "B " + SAM::bearingToStr(this->bearing) +
-		", R " + std::to_string(SAM::manhattan(getCoords(), player)) +
-		", A " + ((this->flyingLow) ? "Low" : "High") +
-		", S " + std::to_string(this->speed);
 }
