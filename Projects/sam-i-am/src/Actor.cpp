@@ -99,7 +99,7 @@ int Actor::getID() {
 }
 
 bool Actor::tickID() {
-	if (identified >= 0) {
+	if (identified <= 0) {
 		return false; //already IDed
 	}
 	identified--;

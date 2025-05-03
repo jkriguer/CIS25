@@ -139,5 +139,5 @@ int SAM::manhattan(Coord src, Coord dst) {
 }
 
 std::string SAM::coordToStr(Coord c) {
-    return "(" + std::to_string(c.x) + ", " + std::to_string(c.y) + ")";
+    return "(" + std::to_string(c.x + 1) + ", " + std::to_string(c.y + 1) + ")";
 }
