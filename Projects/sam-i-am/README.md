@@ -24,6 +24,7 @@ Game Instructions:<br>
 1. You'll have 3 options:
     - Identify: Attempt to identify an unknown aircraft.
     - Shoot: Fire a missile at a known enemy contact.
+    - Wait: Wait one turn for movement to resolve.
     - Quit: Close the game.
 1. Protect all cities from enemy aircraft.
 1. Avoid collateral damage.
