@@ -6,7 +6,7 @@
 namespace SAM {
 	class Game {
 	private:
-		const int DIM_X = 50; //board width
+		const int DIM_X = 48; //board width
 		const int DIM_Y = 30; //board height
 		const int DELAY = 1; //1 turn delay for missiles
 		const int RANGE = 12; //missile range
@@ -40,5 +40,8 @@ namespace SAM {
 		std::vector<SharedActor> getUnidentified();
 		Coord getPlayerPos();
 		std::vector<std::string> getLogs();
+		std::string getLastLog();
+		int getCityCount();
+		void setStatus(Status);
 	};
 }
