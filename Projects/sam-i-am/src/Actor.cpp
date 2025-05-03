@@ -43,7 +43,7 @@ Coord Actor::getCoords() {
 	return Coord(x, y);
 }
 //other methods
-std::string Actor::toString(Coord p) {
+std::string Actor::toString(Coord p, bool printBRAS) {
 	using std::left, std::setw;
 	if (this->actorType != Mobile) {
 		return this->label + " " + SAM::coordToStr(this->getCoords());
@@ -52,10 +52,12 @@ std::string Actor::toString(Coord p) {
 	std::string displayLabel = ((this->identified != 0) ? "Aircraft " : this->label + ' ') +
 		getMapIcon();
 	std::string displayAlt = (flyingLow) ? "LOW" : "HI";
-	out << setw(12) << left << displayLabel << //name
-		setw(4) << left << SAM::bearingToStr(this->bearing) << //bearing
-		setw(4) << left << SAM::manhattan(getCoords(), p) << //range
-		setw(4) << left << displayAlt << setw(4) << left << this->speed; //alt and speed
+	out << setw(13) << left << displayLabel; //name
+	if (printBRAS) {
+			out << setw(4) << left << SAM::bearingToStr(this->bearing) << //bearing
+			setw(4) << left << SAM::manhattan(getCoords(), p) << //range
+			setw(4) << left << displayAlt << setw(4) << left << this->speed; //alt and speed
+	}
 	return out.str();
 }
 

@@ -26,7 +26,7 @@ public:
 	Coord getCoords();
 	Faction getFaction();
 	ActorType getActorType();
-	std::string toString(Coord);
+	std::string toString(Coord = Coord(0, 0), bool = false);
 	void move(SAM::Game&);
 	bool isBlocked(SAM::Game&, Coord);
 	bool isValidTarget(SAM::Game&, Coord);
