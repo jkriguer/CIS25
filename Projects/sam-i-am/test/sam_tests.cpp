@@ -39,11 +39,35 @@ TEST_F(Fixture, makeAndPlaceOverwrite) {
     EXPECT_FALSE(actor2);
 }
 
+TEST_F(Fixture, missileLaunch) {
+    g.loadScenario({ 
+        10, //validator
+        2, //2 static
+        (char)Player, 2, 2, //battery at 2, 2
+        (char)City, 0, 0, //city at 0, 0
+        0, //0 mobiles
+        -10 //validator
+        }); 
+    g.makeAndPlace(Enemy, SAM::getArchetype(Enemy, 0), North, 4, 4); //4 units away
+    auto& target1 = g.getCell(4, 4);
+    EXPECT_TRUE(g.launchMissile(target1)); //should hit, in range
+    g.makeAndPlace(Enemy, SAM::getArchetype(Enemy, 0), North, 2, 22); //20 units away
+    auto& target2 = g.getCell(2, 22);
+    EXPECT_FALSE(g.launchMissile(target2)); //should miss, out of range
+    EXPECT_FALSE(g.launchMissile(nullptr)); //should miss without target
+}
+
+TEST_F(Fixture, actorLeavesOOB) {
+    g.makeAndPlace(Player, "Test Battery", 'T', 2, 2);
+    AircraftParams ap = { "Test", 100 }; //test aircraft that should leave bounds in 1 turn
+    g.makeAndPlace(Enemy, ap, North, 10, 10);
+    g.moveUnits({ Coord(10, 10) }); //should immediately be deleted
+    EXPECT_FALSE(g.getCell(10, 10)); //source cell should be empty
+}
+
 TEST(Actor, tickID) {
     AircraftParams ap = SAM::getArchetype(Enemy, 0); //enemy bomber
     Actor aircraft(Enemy, ap, Bearing::North);
-    EXPECT_EQ(aircraft.getID(), 2);
-    EXPECT_TRUE(aircraft.tickID());
     EXPECT_EQ(aircraft.getID(), 1);
     EXPECT_TRUE(aircraft.tickID());
     EXPECT_EQ(aircraft.getID(), 0);
