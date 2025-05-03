@@ -38,10 +38,38 @@ int main() {
     game.loadScenario(blob); //scenario loaded
 
     std::string title = "SAM-I-AM v1";
-    Status status = Running;
+    bool turnComplete = false; //has player taken their turn?
+    while (game.getStatus() == Running) {
+        if (turnComplete) {
+            game.tickMissiles(); //move missiles
+            game.moveAllUnits(game.getUnitList()); //move units
 
-    while (status == Running) {
-        bool turn = true; //has player taken their turn?
+            bool playerAlive = false;
+            int cityCount = 0;
+            bool anyEnemyAlive = false;
+            for (Coord c : game.getUnitList()) {
+                auto cell = game.getCell(c.x, c.y);
+                if (!cell) {
+                    continue;
+                }
+                if (cell->getActorType() == Player) {
+                    playerAlive = true;
+                }
+                if (cell->getActorType() == City) {
+                    cityCount++;
+                }
+                if (cell->getFaction() == Enemy) {
+                    anyEnemyAlive = true;
+                }
+            }
+            if (!playerAlive || cityCount != game.getCityCount()) {
+                game.setStatus(Lost);
+            }
+            else if (!anyEnemyAlive) {
+                game.setStatus(Win);
+            }
+            turnComplete = false;
+        }
 
         std::vector<SharedActor> contacts, filtered;
         for (Coord c : game.getUnitList()) { //populate list of contacts
@@ -53,7 +81,10 @@ int main() {
 
         SAM::sortContactsByDistance(contacts, game.getPlayerPos()); //sort list of contacts
         SAM::printUI(title, game.drawBoard(), game.listContacts(game.getUnitList())); //draw UI
-        std::cout << "\n[I]dentify   [S]hoot   [Q]uit\nEnter an action:  ";
+        if (!game.getLastLog().empty()) {
+            std::cout << '\n' + game.getLastLog() + '\n';
+        }
+        std::cout << "\n[I]dentify   [S]hoot   [W]ait   [Q]uit\nEnter an action:  ";
         char input = std::tolower(getNextLineAlpha()[0]);
 
         //decision tree
@@ -75,7 +106,7 @@ int main() {
                 int choice = getNextInt();
                 if (choice >= 1 && choice <= filtered.size()) {
                     game.identify(filtered[choice - 1]);
-                    turn = true;
+                    turnComplete = true;
                 }
             }
         }
@@ -97,9 +128,12 @@ int main() {
                 int choice = getNextInt();
                 if (choice >= 1 && choice <= filtered.size()) {
                     game.launchMissile(filtered[choice - 1]);
-                    turn = true;
+                    turnComplete = true;
                 }
             }
+        }
+        else if (input == 'w') { //wait
+            turnComplete = true;
         }
         else if (input == 'q') { //quit
             return 0;
@@ -108,36 +142,6 @@ int main() {
         else {
             std::cout << "Invalid choice\n";
             continue;
-        }
-
-        game.tickMissiles(); //move missiles
-        game.moveAllUnits(game.getUnitList()); //move units
-
-        if (turn) { //check gamestate if player turn has ended
-            bool playerAlive = false;
-            bool anyCityAlive = false;
-            bool anyEnemyAlive = false;
-            for (Coord c : game.getUnitList()) {
-                auto cell = game.getCell(c.x, c.y);
-                if (!cell) {
-                    continue;
-                }
-                if (cell->getActorType() == Player) {
-                    playerAlive = true;
-                }
-                if (cell->getActorType() == City) {
-                    anyCityAlive = true;
-                }
-                if (cell->getFaction() == Enemy) {
-                    anyEnemyAlive = true;
-                }
-            }
-            if (!playerAlive || !anyCityAlive) {
-                status = Lost;
-            }
-            else if (!anyEnemyAlive) {
-                status = Win;
-            }
         }
     }
 	SAM::printUI("GAME OVER!", game.drawBoard(), game.listContacts(game.getUnitList()));

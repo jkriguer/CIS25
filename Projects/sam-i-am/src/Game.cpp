@@ -77,8 +77,8 @@ void SAM::Game::moveAllUnits(const std::vector<Coord>& units) {
             }
         }
     }
-    moveUnits(enemy);
     moveUnits(friendly);
+    moveUnits(enemy);
     moveUnits(neutral);
 }
 
@@ -89,10 +89,10 @@ void SAM::Game::moveUnits(const std::vector<Coord>& units) {
 }
 
 std::vector<std::string> SAM::Game::listContacts(const std::vector<Coord>& units) {
-    std::vector<std::string> output{ "  Name      BRG RNG ALT SPD" };
+    std::vector<std::string> output{ "  Name       BRG RNG ALT SPD" };
     for (const Coord& c : units) {
         if (getCell(c.x, c.y)->getActorType() == Mobile) {
-            output.push_back(getCell(c.x, c.y)->toString(this->playerPos));
+            output.push_back(getCell(c.x, c.y)->toString(this->playerPos, true));
         }
     }
     return output;
@@ -113,6 +113,9 @@ std::vector<Coord> SAM::Game::getUnitList() {
 bool SAM::Game::makeAndPlace(ActorType aT, std::string label, char c, int x, int y) {
     if (getCell(x, y)) { //fail if cell occupied
         return false;
+    }
+    if (aT == City) {
+        this->cityCount++;
     }
     setCell(x, y, std::make_shared<Actor>(aT, label, c));
     getCell(x, y)->setActorCoords({x, y});
@@ -222,10 +225,16 @@ bool SAM::Game::identify(const SharedActor& tgt) {
         return false;
     }
     bool out = tgt->tickID();
-    if (out) {
-        log("ID in progress on " + tgt->toString(playerPos));
+    if (!out) {
+        return false;
     }
-    return out;
+    if (tgt->getID() == 0) {
+        log("ID complete on " + tgt->toString(playerPos));
+    }
+    else {
+        log(std::to_string(tgt->getID()) + "turns until ID complete on " + tgt->toString(playerPos));
+    }
+    return true;
 }
 
 std::vector<SharedActor> SAM::Game::getUnidentified() {
@@ -246,4 +255,16 @@ Coord SAM::Game::getPlayerPos() {
 
 std::vector<std::string> SAM::Game::getLogs() {
     return this->logs;
+}
+
+std::string SAM::Game::getLastLog() {
+    return this->logs.empty() ? "" : this->logs.back();
+}
+
+int SAM::Game::getCityCount() {
+    return this->cityCount;
+}
+
+void SAM::Game::setStatus(Status s) {
+    this->status = s;
 }
