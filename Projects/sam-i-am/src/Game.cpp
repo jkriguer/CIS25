@@ -89,9 +89,11 @@ void SAM::Game::moveUnits(const std::vector<Coord>& units) {
 }
 
 std::vector<std::string> SAM::Game::listContacts(const std::vector<Coord>& units) {
-    std::vector<std::string> output{ "Contacts:" };
+    std::vector<std::string> output{ "  Name      BRG RNG ALT SPD" };
     for (const Coord& c : units) {
-        output.push_back(getCell(c.x, c.y)->toString(this->playerPos));
+        if (getCell(c.x, c.y)->getActorType() == Mobile) {
+            output.push_back(getCell(c.x, c.y)->toString(this->playerPos));
+        }
     }
     return output;
 }
