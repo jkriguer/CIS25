@@ -25,3 +25,28 @@ add_executable(SAM-I-AM
         main.cpp
         ${SOURCES}
 )
+
+# GoogleTest Setup
+include(FetchContent)
+FetchContent_Declare(
+        googletest
+        URL https://github.com/google/googletest/archive/release-1.12.1.zip
+)
+# Prevent GoogleTest from overriding MSVC settings
+set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+FetchContent_MakeAvailable(googletest)
+
+# Enable testing support
+enable_testing()
+
+# Test executable
+add_executable(sam_tests
+        test/sam_tests.cpp
+        ${SOURCES}
+)
+target_include_directories(sam_tests PRIVATE include)
+target_link_libraries(sam_tests gtest_main)
+
+# Register tests
+include(GoogleTest)
+gtest_discover_tests(sam_tests)
