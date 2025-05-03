@@ -41,7 +41,6 @@ int main() {
     bool turnComplete = false; //has player taken their turn?
     while (game.getStatus() == Running) {
         if (turnComplete) {
-            game.tickMissiles(); //move missiles
             game.moveAllUnits(game.getUnitList()); //move units
 
             bool playerAlive = false;
@@ -111,6 +110,7 @@ int main() {
             }
         }
         else if (input == 's') { //shoot
+            std::cout << "SAM effective range: " << game.getRange() << '\n';
             for (auto& contact : contacts) { //split off mobiles
                 if (contact->getActorType() == Mobile) {
                     filtered.push_back(contact);

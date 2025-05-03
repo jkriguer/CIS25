@@ -177,36 +177,15 @@ bool SAM::Game::launchMissile(const SharedActor& tgt) {
     if (!tgt) { //fail if tgt absent/destroyed
         return false;
     }
-    missiles.push_back({ tgt, this->DELAY, this->RANGE });
-    logs.push_back("Launched on " + tgt->toString(this->playerPos) + 
-        ", impact in " + std::to_string(this->DELAY) + " turns.");
-    return true;
-}
-
-void SAM::Game::tickMissiles() {
-    for (int i = missiles.size() - 1; i >= 0; i--) { //work back to front
-        Missile& m = missiles[i];
-        SharedActor tgt = m.target.lock();
-        if (!tgt) { //fail if tgt absent/destroyed
-            logs.push_back("Missile lost guidance and was destroyed.");
-            missiles.erase(missiles.begin() + i);
-            continue; //next missile
-        }
-
-        if (--m.turnsToImpact != 0) { //tick down, check for impact
-            continue; //next missile
-        }
-
-        Coord tgtC = tgt->getCoords();
-        if (SAM::manhattan(playerPos, tgtC) < m.maxRange) { //if in range
-            logs.push_back("Missile hit: " + tgt->toString(this->playerPos) + " destroyed.");
-            getCell(tgtC.x, tgtC.y).reset(); //destroyed
-        }
-        else { //target left range
-            logs.push_back("Missile missed: " + tgt->toString(this->playerPos) + " evaded.");
-        }
-        missiles.erase(missiles.begin() + i);
+    int dist = SAM::manhattan(this->playerPos, tgt->getCoords());
+    if (dist <= this->RANGE) {
+        logs.push_back("Missile launched at " + tgt->toString(playerPos) + " - Hit!");
+        Coord c = tgt->getCoords();
+        getCell(c.x, c.y).reset();
+        return true;
     }
+    logs.push_back("Missile launched at " + tgt->toString(playerPos) + " - evaded.");
+    return false;
 }
 
 std::vector<WeakActor> SAM::Game::getMobilePtrs() {
@@ -263,6 +242,10 @@ std::string SAM::Game::getLastLog() {
 
 int SAM::Game::getCityCount() {
     return this->cityCount;
+}
+
+int SAM::Game::getRange() {
+    return this->RANGE;
 }
 
 void SAM::Game::setStatus(Status s) {

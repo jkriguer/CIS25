@@ -8,12 +8,10 @@ namespace SAM {
 	private:
 		const int DIM_X = 48; //board width
 		const int DIM_Y = 30; //board height
-		const int DELAY = 1; //1 turn delay for missiles
-		const int RANGE = 12; //missile range
+		const int RANGE = 16; //missile range
 		Board board;
 		Status status{ Running };
 		std::vector<std::string> logs;
-		std::vector<Missile> missiles;
 		Coord playerPos; //cached SAM position
 		int cityCount = 0; //for tracking destruction
 	public:
@@ -34,7 +32,6 @@ namespace SAM {
 		bool loadScenario(const std::vector<char>&);
 		void log(std::string);
 		bool launchMissile(const SharedActor&);
-		void tickMissiles();
 		std::vector<WeakActor> getMobilePtrs();
 		bool identify(const SharedActor&);
 		std::vector<SharedActor> getUnidentified();
@@ -42,6 +39,7 @@ namespace SAM {
 		std::vector<std::string> getLogs();
 		std::string getLastLog();
 		int getCityCount();
+		int getRange();
 		void setStatus(Status);
 	};
 }

@@ -32,9 +32,3 @@ struct Coord {
 	int x;
 	int y;
 };
-
-struct Missile {
-	std::weak_ptr<Actor> target;
-	int turnsToImpact;
-	int maxRange;
-};
