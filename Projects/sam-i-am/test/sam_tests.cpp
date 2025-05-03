@@ -47,6 +47,21 @@ TEST(Actor, tickID) {
     EXPECT_EQ(aircraft.getID(), 1);
     EXPECT_TRUE(aircraft.tickID());
     EXPECT_EQ(aircraft.getID(), 0);
-    EXPECT_FALSE(aircraft.tickID()); //should not be negative
+    EXPECT_FALSE(aircraft.tickID()); //should not go negative
     EXPECT_EQ(aircraft.getID(), 0);
+}
+
+TEST(Actor, sortByDistance) {
+    SharedActor a1 = std::make_shared<Actor>(City, "A1", '1');
+    SharedActor a2 = std::make_shared<Actor>(City, "A2", '2');
+    SharedActor a3 = std::make_shared<Actor>(City, "A3", '3');
+    Coord player(0, 0);
+    a1->setActorCoords(Coord(2, 2)); //4
+    a2->setActorCoords(Coord(1, 0)); //1
+    a3->setActorCoords(Coord(3, 0)); //3
+    std::vector<SharedActor> vec{ a1, a2, a3 };
+    SAM::sortContactsByDistance(vec, player);
+    EXPECT_EQ(vec[0], a2);
+    EXPECT_EQ(vec[1], a3);
+    EXPECT_EQ(vec[2], a1);
 }
