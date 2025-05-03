@@ -90,7 +90,7 @@ int main() {
         //decision tree
         if (input == 'i') { //identify
             for (auto& contact : contacts) { //split off unidentified actors
-                if (contact->getID() > 0) {
+                if (contact->getID() != 0 && contact->getActorType() == Mobile) {
                     filtered.push_back(contact);
                 }
             }
@@ -100,7 +100,7 @@ int main() {
             else {
                 std::cout << "\nUnidentified contacts:\n";
                 for (int i = 0; i < filtered.size(); i++) {
-                    std::cout << " [" << i + 1 << "] " << contacts[i]->toString(game.getPlayerPos()) << '\n';
+                    std::cout << " [" << i + 1 << "] " << filtered[i]->toString(game.getPlayerPos()) << '\n';
                 }
                 std::cout << "Pick a contact [#]: ";
                 int choice = getNextInt();
