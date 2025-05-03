@@ -51,15 +51,15 @@ void Actor::move(SAM::Game& g) {
 	int yStep = this->y + (step.y * this->speed);
 
 	if (!g.inBounds(xStep, yStep)) { //if actor leaves map 
-		std::cout << "Debug: moved off map!\n";
+		g.log("Actor left the map. Add more detail.");
 		g.getCell(this->x, this->y).reset(); //destroy it
 		return;
 	}
 
 	//TODO also check destination is empty
-	g.setCell(xStep, yStep, std::move(g.getCell(this->x, this->y)));//actually move
-	this->x = xStep;
-	this->y = yStep;
+	g.setCell(xStep, yStep, g.getCell(this->x, this->y));//actually move
+	g.getCell(this->x, this->y).reset(); //erase last location
+	setActorCoords(Coord(xStep, yStep)); //update internal coords
 }
 
 Actor::~Actor() {
@@ -87,9 +87,7 @@ bool Actor::isValidTarget(SAM::Game& g, Coord dst) {
 		return g.getCell(dst.x, dst.y)->getActorType() == City; //clobber city
 	}
 	if (g.getCell(dst.x, dst.y)->getFaction() == Friendly) { //if actor is friendly
-		g.getCell(dst.x, dst.y)->getFaction() == Enemy; //clobber enemy
+		return g.getCell(dst.x, dst.y)->getFaction() == Enemy; //clobber enemy
 	}
-	else { //otherwise
-		return false; //clobber nothing
-	}
+	return false; //clobber nothing otherwise
 }

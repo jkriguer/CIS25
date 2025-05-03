@@ -5,7 +5,9 @@
 
 class Actor; //forward dec
 
-using Board = std::vector<std::vector<std::unique_ptr<Actor>>>;
+using SharedActor = std::shared_ptr<Actor>;
+using WeakActor = std::weak_ptr<Actor>;
+using Board = std::vector<std::vector<SharedActor>>;
 
 enum Bearing { North, Northeast, East, Southeast, South, Southwest, West, Northwest };
 enum Faction { Neutral, Enemy, Friendly };
@@ -35,4 +37,10 @@ struct OptionalRules {
 struct Coord {
 	int x;
 	int y;
+};
+
+struct Missile {
+	std::weak_ptr<Actor> target;
+	int turnsToImpact;
+	int maxRange;
 };

@@ -31,5 +31,4 @@ public:
 	virtual ~Actor();
 	bool isBlocked(SAM::Game&, Coord);
 	bool isValidTarget(SAM::Game&, Coord);
-
 };

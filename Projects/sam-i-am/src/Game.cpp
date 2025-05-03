@@ -52,11 +52,11 @@ std::vector<std::string> SAM::Game::drawBoard() {
     return output;
 }
 
-std::unique_ptr<Actor>& SAM::Game::getCell(int x, int y) {
+SharedActor& SAM::Game::getCell(int x, int y) {
     return (board).at(y).at(x);
 }
 
-void SAM::Game::setCell(int x, int y, std::unique_ptr<Actor> a) {
+void SAM::Game::setCell(int x, int y, SharedActor a) {
     getCell(x, y) = std::move(a);
 }
 
@@ -112,7 +112,7 @@ bool SAM::Game::makeAndPlace(ActorType aT, std::string label, char c, int x, int
     if (getCell(x, y)) { //fail if cell occupied
         return false;
     }
-    setCell(x, y, std::make_unique<Actor>(aT, label, c));
+    setCell(x, y, std::make_shared<Actor>(aT, label, c));
     getCell(x, y)->setActorCoords({x, y});
     return true; //success
 }
@@ -121,7 +121,7 @@ bool SAM::Game::makeAndPlace(Faction f, AircraftParams role, Bearing b, int x, i
     if (getCell(x, y)) { //fail if cell occupied
         return false;
     }
-    setCell(x, y, std::make_unique<Actor>(f, role, b));
+    setCell(x, y, std::make_shared<Actor>(f, role, b));
     getCell(x, y)->setActorCoords({x, y});
     return true; //success
 }
@@ -145,6 +145,9 @@ bool SAM::Game::loadScenario(const std::vector<char>& s) {
         int y = s[index++];
         std::string label = (type == Player) ? "Battery" : "City " + std::to_string(nextCity++);
         makeAndPlace(type, label, label[0], x, y);
+        if (type == Player) {
+            this->playerPos = Coord(x, y);
+        }
     }
     if (nextCity == 1 || nextCity > fixedCount) { //if all fixed actors are cities or none of them are
         throw std::runtime_error("Illegal scenario: player or cities not placed");
@@ -163,4 +166,51 @@ bool SAM::Game::loadScenario(const std::vector<char>& s) {
 
 void SAM::Game::log(std::string l) {
     logs.push_back(l);
+}
+
+bool SAM::Game::launchMissile(const SharedActor& tgt) {
+    if (!tgt) { //fail if tgt absent/destroyed
+        return false;
+    }
+    missiles.push_back({ tgt, this->DELAY, this->RANGE });
+    logs.push_back("Launched on " + tgt->toString() + 
+        ", impact in " + std::to_string(this->DELAY) + " turns.");
+    return true;
+}
+
+void SAM::Game::tickMissiles() {
+    for (int i = missiles.size() - 1; i >= 0; i--) { //work back to front
+        Missile& m = missiles[i];
+        SharedActor tgt = m.target.lock();
+        if (!tgt) { //fail if tgt absent/destroyed
+            logs.push_back("Missile lost guidance and was destroyed.");
+            missiles.erase(missiles.begin() + i);
+            continue; //next missile
+        }
+
+        if (--m.turnsToImpact != 0) { //tick down, check for impact
+            continue; //next missile
+        }
+
+        Coord tgtC = tgt->getCoords();
+        if (SAM::manhattan(playerPos, tgtC) < m.maxRange) { //if in range
+            logs.push_back("Missile hit: " + tgt->toString() + " destroyed.");
+            getCell(tgtC.x, tgtC.y).reset(); //destroyed
+        }
+        else { //target left range
+            logs.push_back("Missile missed: " + tgt->toString() + " evaded.");
+        }
+        missiles.erase(missiles.begin() + i);
+    }
+}
+
+std::vector<WeakActor> SAM::Game::getMobilePtrs() {
+    std::vector<WeakActor> out;
+    for (Coord c : getUnitList()) {
+        SharedActor& cell = getCell(c.x, c.y);
+        if (cell && cell->getActorType() == Mobile) {
+            out.push_back(cell);
+        }
+    }
+    return out;
 }
