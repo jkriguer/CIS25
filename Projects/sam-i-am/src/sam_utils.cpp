@@ -40,36 +40,32 @@ AircraftParams SAM::getArchetype(Faction f, int index) {
 
 
 
-void SAM::printUI(std::string titleState, std::vector<std::string> visualDisplay, std::vector<std::string> contacts, std::string options) {
-    using std::cout;
-    int contactsPrinted = 0;
-    cout << titleState << '\n';
-    for (int i = 0; i < visualDisplay.size(); i++) {
-        cout << visualDisplay[i];
-        switch (i) {
-            case 0:
-                cout << "   N";
-                break;
-            case 1:
-                cout << " W   E";
-                break;
-            case 2:
-                cout << "   S";
-                break;
-            case 3:
-                cout << "line 3 test";
-                break;
-            case 4:
-                cout << options;
-                break;
-            default:
-                if (i >= 7 && contactsPrinted < contacts.size()) { //start printing from line 7 on
-                    cout << contacts.at(contactsPrinted++);
-                }
+void SAM::printUI(const std::string& title, const std::vector<std::string>& mapRows,
+    const std::vector<std::string>& contacts, const std::string& options) {
+    clearTerm(); //cls
+    std::cout << title << '\n';
+
+    int index = 0; //contacts index
+    for (int i = 0; i < mapRows.size(); i++) {
+        std::cout << mapRows[i];
+
+        if (i == 0) {
+            std::cout << "   N";
         }
-        cout << '\n';
+        if (i == 1) {
+            std::cout << " W   E";
+        }
+        if (i == 2) {
+            std::cout << "   S";
+        }
+        if (i >= 5 && index < contacts.size()) {
+            std::cout << contacts[index++];
+        }
+        std::cout << '\n';
     }
+    std::cout << '\n' << options << '\n';
 }
+
 
 Coord SAM::getBearingMods(Bearing b) { //conceals ugly switching logic
     switch (b) {
