@@ -2,18 +2,17 @@
 #include <string>
 #include <vector>
 #include <fstream>
-#include "../src/text_utils.h"
-#include "../src/hangman_utils.h"
+#include "../include/text_utils.h"
+#include "../include/hangman_utils.h"
 
 int main() {
 	using std::cout, std::string, std::vector;
 
 	const int NUM_WORDS = 2; //2 words will be selected
 	vector<string> wordList;
-	int errorLevel = populateWordList(wordList); //initialize wordlist from file
-	if (errorLevel != 0) { //terminate early if there were problems generating wordlist
-		cout << "Error " << errorLevel << ", check the README for more information.\n";
-		return errorLevel;
+	int invalidWords = populateWordList(wordList); //initialize wordlist from file
+	if (invalidWords > 0) {
+		std::cout << "Warning: " << invalidWords << " word(s) invalid. You might still be able to play.\n";
 	}
 
 	//prepare vars
