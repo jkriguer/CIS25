@@ -10,7 +10,13 @@ int main() {
 
 	const int NUM_WORDS = 2; //2 words will be selected
 	vector<string> wordList;
-	int invalidWords = populateWordList(wordList); //initialize wordlist from file
+	int invalidWords;
+	try {
+		invalidWords = populateWordList(wordList); //initialize wordlist from file
+	}
+	catch (const std::exception& e) {
+		cout << "Error: " << e.what() << '\n';
+	}
 	if (invalidWords > 0) {
 		std::cout << "Warning: " << invalidWords << " word(s) invalid. You might still be able to play.\n";
 	}
