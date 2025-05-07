@@ -1,9 +1,11 @@
 #include "hangman_utils.h"
+#include <filesystem>
 
 int populateWordList(std::vector<std::string>& vec) { //generate word list vector from file
 	std::ifstream inputFile;
 	std::string inputWord;
-	inputFile.open("wordlist.txt"); //file handle opened
+	std::filesystem::path wordlist = std::filesystem::path(ROOT) / "wordlist.txt";
+	inputFile.open(wordlist); //file handle opened
 	if (!inputFile.is_open()) { //error if file can't be opened
 		return -10;
 	}

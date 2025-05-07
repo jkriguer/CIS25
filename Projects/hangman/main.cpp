@@ -2,8 +2,8 @@
 #include <string>
 #include <vector>
 #include <fstream>
-#include "Utility/text_utils.h"
-#include "Utility/hangman_utils.h"
+#include "../src/text_utils.h"
+#include "../src/hangman_utils.h"
 
 int main() {
 	using std::cout, std::string, std::vector;

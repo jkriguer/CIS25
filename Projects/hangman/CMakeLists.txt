@@ -16,6 +16,9 @@ include_directories(include)
 # Glob (thanks light!)
 file(GLOB SOURCES "src/*.cpp")
 
+# path
+add_compile_definitions(ROOT="${CMAKE_SOURCE_DIR}")
+
 # Main executable
 add_executable(Hangman
         main.cpp
