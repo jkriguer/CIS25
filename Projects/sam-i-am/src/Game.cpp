@@ -11,13 +11,6 @@ SAM::Game::Game() {
     status = Running; //start game
 }
 
-int SAM::Game::getWidth() {
-    return DIM_X;
-}
-int SAM::Game::getHeight() {
-    return DIM_Y;
-}
-
 bool SAM::Game::inBounds(int x, int y) {
     return x >= 0 && x < DIM_X && y >= 0 && y < DIM_Y;
 }
@@ -117,8 +110,8 @@ bool SAM::Game::makeAndPlace(ActorType aT, std::string label, char c, int x, int
     if (aT == City) {
         this->cityCount++;
     }
-    setCell(x, y, std::make_shared<Actor>(aT, label, c));
-    getCell(x, y)->setActorCoords({x, y});
+    setCell(x, y, std::make_shared<StaticActor>(aT, label, c));
+    getCell(x, y)->setCoords({x, y});
     return true; //success
 }
 
@@ -126,8 +119,8 @@ bool SAM::Game::makeAndPlace(Faction f, AircraftParams role, Bearing b, int x, i
     if (getCell(x, y)) { //fail if cell occupied
         return false;
     }
-    setCell(x, y, std::make_shared<Actor>(f, role, b));
-    getCell(x, y)->setActorCoords({x, y});
+    setCell(x, y, std::make_shared<MovingActor>(f, role, b));
+    getCell(x, y)->setCoords({x, y});
     return true; //success
 }
 
@@ -179,24 +172,13 @@ bool SAM::Game::launchMissile(const SharedActor& tgt) {
     }
     int dist = SAM::manhattan(this->playerPos, tgt->getCoords());
     if (dist <= this->RANGE) {
-        logs.push_back("Missile launched at " + tgt->toString(playerPos) + " - Hit!");
+        logs.push_back("Missile launched at " + tgt->toString(playerPos, false) + " - Hit!");
         Coord c = tgt->getCoords();
         getCell(c.x, c.y).reset();
         return true;
     }
-    logs.push_back("Missile launched at " + tgt->toString(playerPos) + " - evaded.");
+    logs.push_back("Missile launched at " + tgt->toString(playerPos, false) + " - evaded.");
     return false;
-}
-
-std::vector<WeakActor> SAM::Game::getMobilePtrs() {
-    std::vector<WeakActor> out;
-    for (Coord c : getUnitList()) {
-        SharedActor& cell = getCell(c.x, c.y);
-        if (cell && cell->getActorType() == Mobile) {
-            out.push_back(cell);
-        }
-    }
-    return out;
 }
 
 bool SAM::Game::identify(const SharedActor& tgt) {
@@ -208,24 +190,12 @@ bool SAM::Game::identify(const SharedActor& tgt) {
         return false;
     }
     if (tgt->getID() == 0) {
-        log("ID complete on " + tgt->toString(playerPos));
+        log("ID complete on " + tgt->toString(playerPos, false));
     }
     else {
-        log(std::to_string(tgt->getID()) + " turn(s) until " + tgt->toString(playerPos) + " identified.");
+        log(std::to_string(tgt->getID()) + " turn(s) until " + tgt->toString(playerPos, false) + " identified.");
     }
     return true;
-}
-
-std::vector<SharedActor> SAM::Game::getUnidentified() {
-    std::vector<SharedActor> out;
-    for (WeakActor w : getMobilePtrs()) {
-        auto s = w.lock();
-        if (!s) {
-             continue;
-        }
-        out.push_back(s);
-    }
-    return out;
 }
 
 Coord SAM::Game::getPlayerPos() {
@@ -242,10 +212,6 @@ std::string SAM::Game::getLastLog() {
 
 int SAM::Game::getCityCount() {
     return this->cityCount;
-}
-
-int SAM::Game::getRange() {
-    return this->RANGE;
 }
 
 void SAM::Game::setStatus(Status s) {
