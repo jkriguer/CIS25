@@ -2,11 +2,12 @@
 #include <vector>
 #include <memory>
 #include <string>
+namespace SAM {
+	class Actor; //forward dec
+}
 
-class Actor; //forward dec
-
-using SharedActor = std::shared_ptr<Actor>;
-using WeakActor = std::weak_ptr<Actor>;
+using SharedActor = std::shared_ptr<SAM::Actor>;
+using WeakActor = std::weak_ptr<SAM::Actor>;
 using Board = std::vector<std::vector<SharedActor>>;
 
 enum Bearing { North, Northeast, East, Southeast, South, Southwest, West, Northwest };
