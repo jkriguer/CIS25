@@ -11,7 +11,7 @@
 > ### [Video presentation of program and code](https://www.youtube.com/watch?v=UHvsPSl6sa0)
 
 Installation instructions:<br>
-1. `git clone -n --depth=1 --filter=tree:0 https://github.com/jkriguer/CIS25/`
+1. `git clone -b project1-tests --single-branch -n --depth=1 --filter=tree:0 https://github.com/jkriguer/CIS25/`
 2. `cd CIS25`
 3. `git sparse-checkout set --no-cone /Projects/hangman`
 4. `git checkout`
@@ -25,8 +25,3 @@ How to play:
 4. Get a letter wrong, and the hanged man will be drawn (you'll lose lives).
 5. Guess all the letters and you win!
 6. Run out of lives before you guess all the letters and it's game over.
-
-Error Codes:<br>
-* <b>-10</b>: There was no word list file present. Please make sure that there is a file called "wordlist.txt" in the directory you run this program.
-* <b>-11</b>: The word list file was present but contained no words. This game generates a puzzle using 2 different random words, so you must have at least 2 words in the word list.
-* <b>-12</b>: The word list file was present but didn't have enough words. See explanation for **-11** for more info.

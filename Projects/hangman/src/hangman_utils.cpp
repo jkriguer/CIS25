@@ -1,11 +1,13 @@
 #include "hangman_utils.h"
+#include <filesystem>
 
 int populateWordList(std::vector<std::string>& vec) { //generate word list vector from file
 	std::ifstream inputFile;
 	std::string inputWord;
-	inputFile.open("wordlist.txt"); //file handle opened
+	std::filesystem::path wordlist = std::filesystem::path(ROOT) / "wordlist.txt";
+	inputFile.open(wordlist); //file handle opened
 	if (!inputFile.is_open()) { //error if file can't be opened
-		return -10;
+		throw std::runtime_error("Failed to open wordlist.txt");
 	}
 	int invalidWordCount = 0;
 	while (std::getline(inputFile, inputWord)) {
@@ -17,13 +19,13 @@ int populateWordList(std::vector<std::string>& vec) { //generate word list vecto
 		}
 	}
 	inputFile.close(); //file handle closed
-	if (vec.size() <= 1) {
-		return  (-11 - vec.size()); //-11 if empty, -12 if only one word
+	if (vec.size() == 0) {
+		throw std::runtime_error("No valid words found in wordlist.");
 	}
-	if (invalidWordCount > 0) {
-		std::cout << "Warning: " << invalidWordCount << " word(s) invalid. You might still be able to play.\n";
+	if (vec.size() == 1) {
+		throw std::runtime_error("Only one valid word found in wordlist.");
 	}
-	return 0;
+	return invalidWordCount;
 }
 
 void sortVecChars(std::vector<char>& vec) {
@@ -135,7 +137,7 @@ char getValidLetter(std::vector<char> guessed) {
 int lettersLeftToGuess(std::string words, std::vector<char> guessed) {
 	std::vector<char> unique;
 	for (char ch : words) { //make a vec of all unique letters in str
-		if (isAlpha(ch) && !charInVec(ch, unique)){
+		if (isAlpha(ch) && !charInVec(ch, unique)) {
 			unique.push_back(ch);
 		}
 	}
@@ -152,14 +154,14 @@ int lettersLeftToGuess(std::string words, std::vector<char> guessed) {
 }
 
 std::string petroglyph(int line, int lives) { //just trust me that it works. it could theoretically be deduped but...
-	std::vector<std::string> ascii { //horrific ascii art blob, genuinely inscrutable
-		"  .========.", "  || /", "  ||/", "  ||", "  ||", "  ||", "=========-----====", "||              ||", 
-		"  .========.", "  || /    _|_", "  ||/    (o_o)", "  ||", "  ||", "  ||", "=========-----====", "||              ||", 
-		"  .========.", "  || /    _|_", "  ||/    (o_o)", "  ||      | |", "  ||      |_|", "  ||", "=========-----====", "||              ||", 
-		"  .========.", "  || /    _|_", "  ||/    (o_o)", "  ||     /| |", "  ||    ^ |_|", "  ||", "=========-----====", "||              ||", 
-		"  .========.", "  || /    _|_", "  ||/    (o_o)", "  ||     /| |\\", "  ||    ^ |_| ^", "  ||", "=========-----====", "||              ||", 
-		"  .========.", "  || /    _|_", "  ||/    (o_o)", "  ||     /| |\\", "  ||    ^ |_| ^", "  ||      /", "=========-----====", "||              ||", 
-		"  .========.", "  || /    _|_", "  ||/    (o_o)", "  ||     /| |\\", "  ||    ^ |_| ^", "  ||      / \\", "=========-----====", "||              ||", 
+	std::vector<std::string> ascii{ //horrific ascii art blob, genuinely inscrutable
+		"  .========.", "  || /", "  ||/", "  ||", "  ||", "  ||", "=========-----====", "||              ||",
+		"  .========.", "  || /    _|_", "  ||/    (o_o)", "  ||", "  ||", "  ||", "=========-----====", "||              ||",
+		"  .========.", "  || /    _|_", "  ||/    (o_o)", "  ||      | |", "  ||      |_|", "  ||", "=========-----====", "||              ||",
+		"  .========.", "  || /    _|_", "  ||/    (o_o)", "  ||     /| |", "  ||    ^ |_|", "  ||", "=========-----====", "||              ||",
+		"  .========.", "  || /    _|_", "  ||/    (o_o)", "  ||     /| |\\", "  ||    ^ |_| ^", "  ||", "=========-----====", "||              ||",
+		"  .========.", "  || /    _|_", "  ||/    (o_o)", "  ||     /| |\\", "  ||    ^ |_| ^", "  ||      /", "=========-----====", "||              ||",
+		"  .========.", "  || /    _|_", "  ||/    (o_o)", "  ||     /| |\\", "  ||    ^ |_| ^", "  ||      / \\", "=========-----====", "||              ||",
 		"  .========.", "  || /     |", "  ||/     _|_", "  ||     (x_x)", "  ||     /| |\\", "  ||    ^ |_| ^", "========= / \\ ====", "||              ||"
 	};
 	return ascii.at(((7 - lives) * 8) + line);
