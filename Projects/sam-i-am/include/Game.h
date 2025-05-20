@@ -19,19 +19,19 @@ namespace SAM {
 		Game();
 
 		std::vector<std::string> drawBoard();
-		bool inBounds(int, int);
+		bool inBounds(Coord);
 		int getWidth();
 		int getHeight();
 
-		SharedActor& getCell(int, int);
-		void setCell(int, int, SharedActor);
+		SharedActor& getCell(Coord);
+		void setCell(Coord, SharedActor);
 
 		void moveAllUnits(const std::vector<Coord>&);
 		void moveUnits(const std::vector<Coord>&); 
 
 		std::vector<Coord> getUnitList();
-		bool makeAndPlace(ActorType, std::string, char, int, int);
-		bool makeAndPlace(Faction, AircraftParams, Bearing, int, int);
+		bool makeAndPlace(ActorType, std::string, char, Coord);
+		bool makeAndPlace(Faction, AircraftParams, Bearing, Coord);
 		bool loadScenario(const std::vector<char>&);
 
 

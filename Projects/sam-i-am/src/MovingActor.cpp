@@ -17,18 +17,19 @@ SAM::MovingActor::MovingActor(Faction f, const AircraftParams& ap, Bearing b) {
 
 
 void SAM::MovingActor::move(SAM::Game& g) {
-	Coord step = SAM::getBearingMods(bearing);
-	int xStep = position.x + step.x * speed;
-	int yStep = position.y + step.y * speed;
+	Coord step = position;
+	Coord mods = getBearingMods(bearing);
+	step.x += mods.x * speed;
+	step.y += mods.y * speed;
 
-	if (!g.inBounds(xStep, yStep)) { //if actor leaves map 
+	if (!g.inBounds(step)) { //if actor leaves map 
 		g.log(this->toString(position, false) + " left the map.");
-		g.getCell(position.x, position.y).reset(); //destroy it
+		g.getCell(position).reset(); //destroy it
 		return;
 	}
-	g.setCell(xStep, yStep, std::move(g.getCell(position.x, position.y))); //actually move
-	g.getCell(position.x, position.y).reset(); //erase last location
-	setCoords({ xStep, yStep });
+	g.setCell(step, std::move(g.getCell(position))); //actually move
+	g.getCell(position).reset(); //erase last location
+	setCoords(step);
 }
 
 bool SAM::MovingActor::isMobile() const {

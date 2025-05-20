@@ -48,7 +48,7 @@ int main() {
             int cityCount = 0;
             bool anyEnemyAlive = false;
             for (Coord c : game.getUnitList()) {
-                auto cell = game.getCell(c.x, c.y);
+                SharedActor cell = game.getCell(c);
                 if (!cell) {
                     continue;
                 }
@@ -76,7 +76,7 @@ int main() {
 
         std::vector<SharedActor> contacts, filtered;
         for (Coord c : game.getUnitList()) { //populate list of contacts
-            auto& cell = game.getCell(c.x, c.y);
+            auto& cell = game.getCell(c);
             if (cell) {
                 contacts.push_back(cell);
             }
