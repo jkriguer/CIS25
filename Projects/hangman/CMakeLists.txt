@@ -41,6 +41,7 @@ enable_testing()
 # Test executable
 add_executable(hangman_tests
         test/hangman_tests.cpp
+        test/new_hangman_tests.cpp
         ${SOURCES}
 )
 target_include_directories(hangman_tests PRIVATE include)
