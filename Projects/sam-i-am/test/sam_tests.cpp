@@ -3,7 +3,8 @@
 #include "../include/sam_types.h"
 #include "../include/sam_utils.h"
 #include "../include/Game.h"
-#include "../include/Actor.h"
+#include "../include/StaticActor.h"
+#include "../include/MovingActor.h"
 
 TEST(Utils, manhattanDistance) { //simple math
     EXPECT_EQ(SAM::manhattan({ 0,0 }, { 0,0 }), 0);
@@ -23,10 +24,10 @@ protected:
 
 TEST_F(Fixture, boundsChecking) {
     EXPECT_TRUE(g.inBounds(0, 0));
-    EXPECT_TRUE(g.inBounds(g.getWidth() - 1, g.getHeight() - 1));
+    EXPECT_TRUE(g.inBounds(g.DIM_X - 1, g.DIM_Y - 1));
     EXPECT_FALSE(g.inBounds(-1, 0));
-    EXPECT_FALSE(g.inBounds(g.getWidth(), 0));
-    EXPECT_FALSE(g.inBounds(0, g.getHeight()));
+    EXPECT_FALSE(g.inBounds(g.DIM_X, 0));
+    EXPECT_FALSE(g.inBounds(0, g.DIM_Y));
 }
 
 TEST_F(Fixture, makeAndPlaceOverwrite) {
@@ -67,7 +68,7 @@ TEST_F(Fixture, actorLeavesOOB) {
 
 TEST(Actor, tickID) {
     AircraftParams ap = SAM::getArchetype(Enemy, 0); //enemy bomber
-    Actor aircraft(Enemy, ap, Bearing::North);
+    SAM::MovingActor aircraft(Enemy, ap, Bearing::North);
     EXPECT_EQ(aircraft.getID(), 1);
     EXPECT_TRUE(aircraft.tickID());
     EXPECT_EQ(aircraft.getID(), 0);
@@ -76,13 +77,13 @@ TEST(Actor, tickID) {
 }
 
 TEST(Actor, sortByDistance) {
-    SharedActor a1 = std::make_shared<Actor>(City, "A1", '1');
-    SharedActor a2 = std::make_shared<Actor>(City, "A2", '2');
-    SharedActor a3 = std::make_shared<Actor>(City, "A3", '3');
+    SharedActor a1 = std::make_shared<SAM::StaticActor>(City, "A1", '1');
+    SharedActor a2 = std::make_shared<SAM::StaticActor>(City, "A2", '2');
+    SharedActor a3 = std::make_shared<SAM::StaticActor>(City, "A3", '3');
     Coord player(0, 0);
-    a1->setActorCoords(Coord(2, 2)); //4
-    a2->setActorCoords(Coord(1, 0)); //1
-    a3->setActorCoords(Coord(3, 0)); //3
+    a1->setCoords(Coord(2, 2)); //4
+    a2->setCoords(Coord(1, 0)); //1
+    a3->setCoords(Coord(3, 0)); //3
     std::vector<SharedActor> vec{ a1, a2, a3 };
     SAM::sortContactsByDistance(vec, player);
     EXPECT_EQ(vec[0], a2);
