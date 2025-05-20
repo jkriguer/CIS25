@@ -15,13 +15,6 @@ enum Faction { Neutral, Enemy, Friendly };
 enum ActorType { Player, Mobile, City };
 enum Status {Running, Lost, Win, Stalemate};
 
-
-struct PlayerParams {
-	std::string label;
-	int range;
-	int launchDelay;
-};
-
 struct AircraftParams {
 	std::string label;
 	int speed;
