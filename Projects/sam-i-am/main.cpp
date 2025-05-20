@@ -2,6 +2,8 @@
 #include <filesystem>
 #include "../include/sam_utils.h"
 #include "../include/Actor.h"
+#include "../include/StaticActor.h"
+#include "../include/MovingActor.h"
 #include "../include/Game.h"
 #include "../include/sam_io.h"
 #include "../include/scanner.h"
@@ -101,7 +103,7 @@ int main() {
             else {
                 std::cout << "\nUnidentified contacts:\n";
                 for (int i = 0; i < filtered.size(); i++) {
-                    std::cout << " [" << i + 1 << "] " << filtered[i]->toString(game.getPlayerPos()) << '\n';
+                    std::cout << " [" << i + 1 << "] " << filtered[i]->toString(game.getPlayerPos(), false) << '\n';
                 }
                 std::cout << "Pick a contact [#]: ";
                 int choice = getNextInt();
@@ -112,7 +114,7 @@ int main() {
             }
         }
         else if (input == 's') { //shoot
-            std::cout << "SAM effective range: " << game.getRange() << '\n';
+            std::cout << "SAM effective range: " << game.RANGE << '\n';
             for (auto& contact : contacts) { //split off mobiles
                 if (contact->getActorType() == Mobile) {
                     filtered.push_back(contact);
@@ -124,7 +126,7 @@ int main() {
             else {
                 std::cout << "\nEnemy contacts:\n";
                 for (int i = 0; i < filtered.size(); i++) {
-                    std::cout << " [" << i + 1 << "] " << filtered[i]->toString(game.getPlayerPos()) << '\n';
+                    std::cout << " [" << i + 1 << "] " << filtered[i]->toString(game.getPlayerPos(), false) << '\n';
                 }
                 std::cout << "Pick a contact [#]: ";
                 int choice = getNextInt();
