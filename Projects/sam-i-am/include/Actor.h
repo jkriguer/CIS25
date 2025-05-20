@@ -3,33 +3,26 @@
 
 namespace SAM {
 	class Game; //forward dec
-}
 
-class Actor {
-protected:
-	ActorType actorType;
-	int x = -1; //changed after construction
-	int y = -1; //changed after construction
-	std::string label = "Unnamed Actor";
-	char mapIcon;
-	Faction faction = Neutral;
-	int identified = 0; //turns until identified. 0 means fully IDed
-	int speed = 0; //in tiles per turn
-	Bearing bearing = Bearing::North;
-	bool flyingLow = true; //TODO modifies range to hit
-	bool attacks = false; //does actor attack other actors?
-public:
-	Actor(ActorType, std::string, char); //stationary
-	Actor(Faction, AircraftParams, Bearing); //mobile
-	char getMapIcon();
-	bool setActorCoords(Coord);
-	Coord getCoords();
-	Faction getFaction();
-	ActorType getActorType();
-	std::string toString(Coord = Coord(0, 0), bool = false);
-	void move(SAM::Game&);
-	bool isBlocked(SAM::Game&, Coord);
-	bool isValidTarget(SAM::Game&, Coord);
-	int getID();
-	bool tickID();
-};
+	class Actor {
+	protected:
+		Coord position{ -1, -1 };
+		std::string label = "Unnamed";
+		char mapIcon = '?';
+		Faction faction = Neutral;
+		ActorType actorType = City;
+	public:
+		virtual ~Actor() = default;
+		virtual void move(SAM::Game&) = 0;
+		virtual bool isMobile() const = 0;
+		virtual std::string toString(Coord, bool) const = 0;
+		virtual int getID() = 0;
+		virtual bool tickID() = 0;
+
+		Coord getCoords();
+		void setCoords(Coord);
+		char getMapIcon();
+		Faction getFaction();
+		ActorType getActorType();
+	};
+}
