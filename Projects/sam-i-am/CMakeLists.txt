@@ -26,12 +26,6 @@ add_executable(SAM-I-AM
         ${SOURCES}
 )
 
-# scenario generator
-add_executable(scenario_maker
-        scenario_maker.cpp
-        ${SOURCES}
-)
-
 # GoogleTest Setup
 include(FetchContent)
 FetchContent_Declare(
