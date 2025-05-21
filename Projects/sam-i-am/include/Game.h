@@ -20,8 +20,6 @@ namespace SAM {
 
 		std::vector<std::string> drawBoard();
 		bool inBounds(Coord);
-		int getWidth();
-		int getHeight();
 
 		ActorPtr& getCell(Coord);
 		void setCell(Coord, ActorPtr);
