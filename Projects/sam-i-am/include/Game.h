@@ -10,7 +10,7 @@ namespace SAM {
 		Board board;
 		Status status{ Running };
 		std::vector<std::string> logs;
-		Coord playerPos; //cached SAM position
+		Coord playerPos{ 0, 0 }; //cached SAM position
 		int cityCount = 0; //for tracking destruction
 	public:
 		const int DIM_X = 48; //board width
