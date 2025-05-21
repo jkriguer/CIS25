@@ -3,11 +3,6 @@
 #include <iostream> 
 #include <unordered_map>
 
-char SAM::getNewContactNumber() {
-    static int count = 0;
-    return '0' + (count++ % 10);
-}
-
 AircraftParams SAM::getArchetype(Faction f, int index) {
     const int SPD_SLOW = 1, SPD_MED = 2, SPD_FAST = 4;
     const std::unordered_map<Faction, std::vector<AircraftParams>> archetypes{

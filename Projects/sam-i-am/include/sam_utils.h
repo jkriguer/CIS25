@@ -2,7 +2,6 @@
 #include "../include/sam_types.h" //types
 
 namespace SAM {
-	char getNewContactNumber();
 	AircraftParams getArchetype(Faction, int = -1);
 	void printUI(const std::string&, const std::vector<std::string>&, const std::vector<std::string>&);
 	Coord getBearingMods(Bearing);
