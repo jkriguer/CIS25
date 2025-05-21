@@ -107,16 +107,19 @@ std::string SAM::bearingToStr(Bearing b) {
 }
 
 std::string SAM::factionToStr(Faction F) {
+    std::string out;
     switch (F) {
         case Faction::Friendly:
-            return "Friendly";
+            out = "FRIENDLY";
+            break;
         case Faction::Enemy:
-            return "Hostile";
+            out = "HOSTILE";
+            break;
         case Faction::Neutral:
-            return "Neutral";
-        default:
-            return "???";
+            out = "NEUTRAL";
+            break;
     }
+    return out;
 }
 
 void SAM::clearTerm() {

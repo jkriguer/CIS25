@@ -40,7 +40,8 @@ std::string SAM::MovingActor::toString(Coord c, bool printBRAS) const {
 	std::string displayAlt = (flyingLow) ? "LOW" : "HI";
 	out << setw(13) << left << displayLabel; //name
 	if (printBRAS) {
-		out << setw(4) << left << SAM::bearingToStr(bearing) << //bearing
+		out << setw(9) << left << (isIdentified ? factionToStr(this->faction) : "BOGEY") << //bogey dope
+			setw(4) << left << SAM::bearingToStr(bearing) << //bearing
 			setw(4) << left << SAM::manhattan(position, c) << //range
 			setw(4) << left << displayAlt << setw(4) << left << this->speed; //alt and speed
 	}

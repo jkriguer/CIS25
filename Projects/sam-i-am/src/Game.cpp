@@ -82,7 +82,7 @@ void SAM::Game::moveUnits(const std::vector<Coord>& units) {
 }
 
 std::vector<std::string> SAM::Game::listContacts(const std::vector<Coord>& units) {
-	std::vector<std::string> output{ "  Name       BRG RNG ALT SPD" };
+	std::vector<std::string> output{ "  Name       IFF      BRG RNG ALT SPD" };
 	for (const Coord& c : units) {
 		if (dynamic_cast<MovingActor*>(getCell(c).get())) {
 			output.push_back(getCell(c)->toString(this->playerPos, true));
