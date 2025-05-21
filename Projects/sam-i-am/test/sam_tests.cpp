@@ -42,7 +42,7 @@ TEST_F(GameFixture, missileLaunch) {
 	g.makeAndPlace(City, "City", 'C', { 2, 2 });
 	g.makeAndPlace(Enemy, SAM::getArchetype(Enemy, 0), North, { 4, 4 }); //within range
 	EXPECT_TRUE(g.launchMissile({ 4, 4 })); //should hit, in range
-	g.makeAndPlace(Enemy, SAM::getArchetype(Enemy, 0), North, { 2, 30 }); //out of range
+	g.makeAndPlace(Enemy, SAM::getArchetype(Enemy, 0), North, { 2, 28 }); //out of range
 	EXPECT_FALSE(g.launchMissile({ 2, 22 })); //should miss, out of range
 	EXPECT_FALSE(g.launchMissile({ 25, 25 })); //should miss without target
 }
