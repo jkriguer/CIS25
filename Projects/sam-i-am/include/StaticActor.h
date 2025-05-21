@@ -5,9 +5,8 @@ namespace SAM {
 	private:
 		typedef Actor base;
 	public:
-		StaticActor(std::string, char);
+		explicit StaticActor(std::string, char);
 		void move(SAM::Game&) override;
-		bool isMobile() const override;
 		std::string toString(Coord, bool) const override;
 	};
 }
