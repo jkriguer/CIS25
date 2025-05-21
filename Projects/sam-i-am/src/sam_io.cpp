@@ -3,6 +3,7 @@
 #include <filesystem>
 
 const char SAM::SAVE_VERSION = 10;
+const int SAM::MAX_X = 48, SAM::MAX_Y = 30;
 
 bool SAM::writeScenario(const std::string& file, const std::vector<char>& scenario) {
 	std::filesystem::path path = std::filesystem::path(SCENARIOS_DIR) / file; //set path
