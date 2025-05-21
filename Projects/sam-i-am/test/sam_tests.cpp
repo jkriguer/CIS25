@@ -22,7 +22,7 @@ class GameFixture : public ::testing::Test {
 protected:
 	SAM::Game g;
 	GameFixture() {
-		g.makeAndPlaceCity({ 0, 0 });
+		g.makeAndPlaceBattery({ 0, 0 });
 	}
 };
 
