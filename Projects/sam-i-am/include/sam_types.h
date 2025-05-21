@@ -6,9 +6,8 @@ namespace SAM {
 	class Actor; //forward dec
 }
 
-using SharedActor = std::shared_ptr<SAM::Actor>;
-using WeakActor = std::weak_ptr<SAM::Actor>;
-using Board = std::vector<std::vector<SharedActor>>;
+using ActorPtr = std::unique_ptr<SAM::Actor>;
+using Board = std::vector<std::vector<ActorPtr>>;
 
 enum Bearing { North, Northeast, East, Southeast, South, Southwest, West, Northwest };
 enum Faction { Neutral, Enemy, Friendly };

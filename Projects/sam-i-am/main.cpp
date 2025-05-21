@@ -9,7 +9,7 @@
 #include "../include/scanner.h"
 
 int main() {
-    std::string title = "SAM-I-AM v1";
+    std::string title = "SAM-I-AM v2";
     std::cout << title << "\nFor best results, maximise this terminal window.\n";
     std::vector<std::string> scenarioBinaries;
     for (const auto& file : std::filesystem::directory_iterator(SCENARIOS_DIR)) {
@@ -48,7 +48,7 @@ int main() {
             int cityCount = 0;
             bool anyEnemyAlive = false;
             for (Coord c : game.getUnitList()) {
-                SharedActor cell = game.getCell(c);
+                auto& cell = game.getCell(c);
                 if (!cell) {
                     continue;
                 }
@@ -74,15 +74,14 @@ int main() {
             }
         }
 
-        std::vector<SharedActor> contacts, filtered;
+        std::vector<Coord> contacts, filtered;
         for (Coord c : game.getUnitList()) { //populate list of contacts
-            auto& cell = game.getCell(c);
-            if (cell) {
-                contacts.push_back(cell);
-            }
+            if (game.getCell(c)) {
+                contacts.push_back(c);
+           }
         }
 
-        SAM::sortContactsByDistance(contacts, game.getPlayerPos()); //sort list of contacts
+        contacts = game.sortByDistance(contacts, game.getPlayerPos()); //sort list of contacts
         SAM::printUI(title, game.drawBoard(), game.listContacts(game.getUnitList())); //draw UI
         if (!game.getLastLog().empty()) {
             std::cout << '\n' + game.getLastLog() + '\n';
@@ -92,9 +91,10 @@ int main() {
 
         //decision tree
         if (input == 'i') { //identify
-            for (auto& contact : contacts) { //split off unidentified actors
-                if (contact->getID() != 0 && contact->getActorType() == Mobile) {
-                    filtered.push_back(contact);
+            for (Coord contactC : contacts) { //split off unidentified actors
+                auto& contact = game.getCell(contactC);
+                if (contact->getID() != 0 && contact->isMobile()) {
+                    filtered.push_back(contactC);
                 }
             }
             if (filtered.empty()) {
@@ -103,7 +103,7 @@ int main() {
             else {
                 std::cout << "\nUnidentified contacts:\n";
                 for (int i = 0; i < filtered.size(); i++) {
-                    std::cout << " [" << i + 1 << "] " << filtered[i]->toString(game.getPlayerPos(), false) << '\n';
+                    std::cout << " [" << i + 1 << "] " << game.getCell(filtered[i])->toString(game.getPlayerPos(), false) << '\n';
                 }
                 std::cout << "Pick a contact [#]: ";
                 int choice = getNextInt();
@@ -115,9 +115,10 @@ int main() {
         }
         else if (input == 's') { //shoot
             std::cout << "SAM effective range: " << game.RANGE << '\n';
-            for (auto& contact : contacts) { //split off mobiles
-                if (contact->getActorType() == Mobile) {
-                    filtered.push_back(contact);
+            for (Coord contactC : contacts) { //split off mobiles
+                auto& contact = game.getCell(contactC);
+                if (contact->isMobile()) {
+                    filtered.push_back(contactC);
                 }
             }
             if (filtered.empty()) {
@@ -126,7 +127,7 @@ int main() {
             else {
                 std::cout << "\nEnemy contacts:\n";
                 for (int i = 0; i < filtered.size(); i++) {
-                    std::cout << " [" << i + 1 << "] " << filtered[i]->toString(game.getPlayerPos(), false) << '\n';
+                    std::cout << " [" << i + 1 << "] " << game.getCell(filtered[i])->toString(game.getPlayerPos(), false) << '\n';
                 }
                 std::cout << "Pick a contact [#]: ";
                 int choice = getNextInt();

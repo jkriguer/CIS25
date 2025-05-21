@@ -135,16 +135,3 @@ int SAM::manhattan(Coord src, Coord dst) {
 std::string SAM::coordToStr(Coord c) {
     return "(" + std::to_string(c.x + 1) + ", " + std::to_string(c.y + 1) + ")";
 }
-
-void SAM::sortContactsByDistance(std::vector<SharedActor>& vec, Coord c) { //insertion srots vec on manhattan distance
-    for (int i = 1; i < vec.size(); i++) {
-        auto current = vec[i];
-        int currentDist = SAM::manhattan(c, current->getCoords());
-        int j = i - 1;
-        while (j >= 0 && SAM::manhattan(c, vec[j]->getCoords()) > currentDist) {
-            vec[j + 1] = vec[j];
-            j--;
-        }
-        vec[j + 1] = current;
-    }
-}

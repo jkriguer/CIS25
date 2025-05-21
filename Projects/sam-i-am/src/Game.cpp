@@ -45,11 +45,11 @@ std::vector<std::string> SAM::Game::drawBoard() {
 	return output;
 }
 
-SharedActor& SAM::Game::getCell(Coord c) {
+ActorPtr& SAM::Game::getCell(Coord c) {
 	return (board).at(c.y).at(c.x);
 }
 
-void SAM::Game::setCell(Coord c, SharedActor a) {
+void SAM::Game::setCell(Coord c, ActorPtr a) {
 	getCell(c) = std::move(a);
 }
 
@@ -110,7 +110,7 @@ bool SAM::Game::makeAndPlace(ActorType aT, std::string label, char ch, Coord co)
 	if (aT == City) {
 		this->cityCount++;
 	}
-	setCell(co, std::make_shared<StaticActor>(aT, label, ch));
+	setCell(co, std::make_unique<StaticActor>(aT, label, ch));
 	getCell(co)->setCoords(co);
 	return true; //success
 }
@@ -119,7 +119,7 @@ bool SAM::Game::makeAndPlace(Faction f, AircraftParams role, Bearing b, Coord co
 	if (getCell(co)) { //fail if cell occupied
 		return false;
 	}
-	setCell(co, std::make_shared<MovingActor>(f, role, b));
+	setCell(co, std::make_unique<MovingActor>(f, role, b));
 	getCell(co)->setCoords(co);
 	return true; //success
 }
@@ -142,7 +142,7 @@ bool SAM::Game::loadScenario(const std::vector<char>& s) {
 		int x = s[index++];
 		int y = s[index++];
 		std::string label = (type == Player) ? "Battery" : "City " + std::to_string(nextCity++);
-		makeAndPlace(type, label, label[0], {x, y});
+		makeAndPlace(type, label, label[0], { x, y });
 		if (type == Player) {
 			this->playerPos = { x, y };
 		}
@@ -166,21 +166,38 @@ void SAM::Game::log(std::string l) {
 	logs.push_back(l);
 }
 
-bool SAM::Game::launchMissile(const SharedActor& tgt) {
+std::vector<Coord> SAM::Game::sortByDistance(const std::vector<Coord>& in, Coord from) const {
+	auto out = in;
+	for (int i = 1; i < out.size(); i++) {
+		auto current = out[i];
+		int dist = SAM::manhattan(from, current);
+		int j = i;
+		while (j > 0 && SAM::manhattan(from, out[j - 1]) > dist) {
+			out[j] = out[j - 1];
+			j--;
+		}
+		out[j] = current;
+	}
+	return out;
+}
+
+bool SAM::Game::launchMissile(Coord tgtC) {
+	auto& tgt = getCell(tgtC);
 	if (!tgt) { //fail if tgt absent/destroyed
 		return false;
 	}
-	int dist = SAM::manhattan(this->playerPos, tgt->getCoords());
-	if (dist <= this->RANGE) {
+	int dist = SAM::manhattan(playerPos, tgtC);
+	if (dist <= RANGE) {
 		logs.push_back("Missile launched at " + tgt->toString(playerPos, false) + " - Hit!");
-		getCell(tgt->getCoords()).reset();
+		getCell(tgtC).reset();
 		return true;
 	}
-	logs.push_back("Missile launched at " + tgt->toString(playerPos, false) + " - evaded.");
+	logs.push_back("Missile launched at " + tgt->toString(playerPos, false) + " - Missed.");
 	return false;
 }
 
-bool SAM::Game::identify(const SharedActor& tgt) {
+bool SAM::Game::identify(Coord tgtC) {
+	auto& tgt = getCell(tgtC);
 	if (!tgt) {
 		return false;
 	}
@@ -216,3 +233,4 @@ int SAM::Game::getCityCount() {
 void SAM::Game::setStatus(Status s) {
 	this->status = s;
 }
+

@@ -11,5 +11,4 @@ namespace SAM {
 	void clearTerm();
 	int manhattan(Coord, Coord);
 	std::string coordToStr(Coord);
-	void sortContactsByDistance(std::vector<SharedActor>&, Coord);
 }

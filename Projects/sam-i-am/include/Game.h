@@ -23,11 +23,11 @@ namespace SAM {
 		int getWidth();
 		int getHeight();
 
-		SharedActor& getCell(Coord);
-		void setCell(Coord, SharedActor);
+		ActorPtr& getCell(Coord);
+		void setCell(Coord, ActorPtr);
 
 		void moveAllUnits(const std::vector<Coord>&);
-		void moveUnits(const std::vector<Coord>&); 
+		void moveUnits(const std::vector<Coord>&);
 
 		std::vector<Coord> getUnitList();
 		bool makeAndPlace(ActorType, std::string, char, Coord);
@@ -36,9 +36,9 @@ namespace SAM {
 
 
 		std::vector<std::string> listContacts(const std::vector<Coord>&);
-		
-		bool launchMissile(const SharedActor&);
-		bool identify(const SharedActor&);
+
+		bool launchMissile(Coord);
+		bool identify(Coord);
 
 
 		void setStatus(Status);
@@ -48,5 +48,7 @@ namespace SAM {
 		std::vector<std::string> getLogs();
 		std::string getLastLog();
 		void log(std::string);
+
+		std::vector<Coord> sortByDistance(const std::vector<Coord>&, Coord) const;
 	};
 }
