@@ -8,16 +8,17 @@ ____(=)____		   _____ ___    __  ___   ____   ___    __  ___
       |   ^
           |
 ```
-> ### [Video presentation of program and code](https://youtu.be/CW-bEuKq3F0)
+> ### [Video presentation of program and code](https://example.com)
 
 Installation instructions:<br>
-1. `git clone -n --depth=1 --filter=tree:0 https://github.com/jkriguer/CIS25/`
+1. `git clone -b project3 -n --depth=1 --filter=tree:0 https://github.com/jkriguer/CIS25/`
 1. `cd CIS25`
 1. `git sparse-checkout set --no-cone /Projects/sam-i-am`
 1. `git checkout`
 1. `mkdir build`
 1. `cd build`
 1. `cmake ..`
+1. `cmake --build .`
 
 SAM-I-AM is a grid-based strategy game where you control a SAM battery to identify and destroy threats to protect your cities.<br>
 Game Instructions:<br>
