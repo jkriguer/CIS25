@@ -16,11 +16,3 @@ bool SAM::StaticActor::isMobile() const {
 std::string SAM::StaticActor::toString(Coord c, bool b) const {
 	return this->label + ' ' + SAM::coordToStr(this->position);
 }
-
-int SAM::StaticActor::getID() {
-	return 0;
-}
-
-bool SAM::StaticActor::tickID() {
-	return false;
-}

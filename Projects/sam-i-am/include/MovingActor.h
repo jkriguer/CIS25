@@ -5,7 +5,6 @@ namespace SAM {
 	private:
 		typedef Actor base;
 	protected:
-		int identified = 1; //turns until identified. 0 means fully IDed
 		int speed = 0; //max speed in tiles per turn
 		Bearing bearing = North;
 		bool flyingLow = true; //TODO modifies range to hit
@@ -15,8 +14,5 @@ namespace SAM {
 		void move(SAM::Game&) override;
 		bool isMobile() const override;
 		std::string toString(Coord, bool) const override;
-
-		int getID() override;
-		bool tickID() override;
 	};
 }

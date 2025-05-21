@@ -9,7 +9,5 @@ namespace SAM {
 		void move(SAM::Game&) override;
 		bool isMobile() const override;
 		std::string toString(Coord, bool) const override;
-		int getID() override;
-		bool tickID() override;
 	};
 }

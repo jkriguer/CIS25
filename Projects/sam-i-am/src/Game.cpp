@@ -198,19 +198,11 @@ bool SAM::Game::launchMissile(Coord tgtC) {
 
 bool SAM::Game::identify(Coord tgtC) {
 	auto& tgt = getCell(tgtC);
-	if (!tgt) {
+	if (!tgt || tgt->isIdentified) {
 		return false;
 	}
-	bool out = tgt->tickID();
-	if (!out) {
-		return false;
-	}
-	if (tgt->getID() == 0) {
-		log("ID complete on " + tgt->toString(playerPos, false));
-	}
-	else {
-		log(std::to_string(tgt->getID()) + " turn(s) until " + tgt->toString(playerPos, false) + " identified.");
-	}
+	tgt->isIdentified = true;
+	log("ID complete on " + tgt->toString(playerPos, false));
 	return true;
 }
 

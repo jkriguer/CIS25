@@ -16,8 +16,8 @@ namespace SAM {
 		virtual void move(SAM::Game&) = 0;
 		virtual bool isMobile() const = 0;
 		virtual std::string toString(Coord, bool) const = 0;
-		virtual int getID() = 0;
-		virtual bool tickID() = 0;
+
+		bool isIdentified = true;
 
 		Coord getCoords();
 		void setCoords(Coord);

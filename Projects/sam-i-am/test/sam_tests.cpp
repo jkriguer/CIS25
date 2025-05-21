@@ -69,13 +69,10 @@ TEST_F(GameFixture, sortByDistance) {
 	EXPECT_EQ(vec[2].x, a1.x);
 }
 
-TEST(Actor, tickID) {
-	AircraftParams ap = SAM::getArchetype(Enemy, 0); //enemy bomber
-	SAM::MovingActor aircraft(Enemy, ap, Bearing::North);
-	EXPECT_EQ(aircraft.getID(), 1);
-	EXPECT_TRUE(aircraft.tickID());
-	EXPECT_EQ(aircraft.getID(), 0);
-	EXPECT_FALSE(aircraft.tickID()); //should not go negative
-	EXPECT_EQ(aircraft.getID(), 0);
+TEST(Actor, identifiedBool) {
+	SAM::MovingActor aircraftHostile(Enemy, SAM::getArchetype(Enemy, 0), Bearing::North); //enemy bomber
+	SAM::MovingActor aircraftFriendly(Friendly, SAM::getArchetype(Friendly, 0), Bearing::North); //friendly fighter
+	EXPECT_FALSE(aircraftHostile.isIdentified);
+	EXPECT_TRUE(aircraftFriendly.isIdentified);
 }
 

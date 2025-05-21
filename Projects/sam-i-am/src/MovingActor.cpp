@@ -12,7 +12,7 @@ SAM::MovingActor::MovingActor(Faction f, const AircraftParams& ap, Bearing b) {
 	speed = ap.speed;
 	bearing = b;
 	attacks = ap.attacks;
-	identified = (f == Friendly) ? 0 : 1;
+	isIdentified = (f == Friendly);
 }
 
 
@@ -39,7 +39,7 @@ bool SAM::MovingActor::isMobile() const {
 std::string SAM::MovingActor::toString(Coord c, bool printBRAS) const {
 	using std::left, std::setw;
 	std::ostringstream out;
-	std::string displayLabel = ((this->identified != 0) ? "Aircraft " : this->label + ' ') + this->mapIcon;
+	std::string displayLabel = ((!isIdentified) ? "Aircraft " : this->label + ' ') + this->mapIcon;
 	std::string displayAlt = (flyingLow) ? "LOW" : "HI";
 	out << setw(13) << left << displayLabel; //name
 	if (printBRAS) {
@@ -49,16 +49,3 @@ std::string SAM::MovingActor::toString(Coord c, bool printBRAS) const {
 	}
 	return out.str();
 }
-
-int SAM::MovingActor::getID() {
-	return identified;
-}
-
-bool SAM::MovingActor::tickID() {
-	if (identified <= 0) {
-		return false;
-	}
-	identified--;
-	return true;
-}
-

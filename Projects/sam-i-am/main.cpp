@@ -93,7 +93,7 @@ int main() {
         if (input == 'i') { //identify
             for (Coord contactC : contacts) { //split off unidentified actors
                 auto& contact = game.getCell(contactC);
-                if (contact->getID() != 0 && contact->isMobile()) {
+                if (contact->isIdentified && contact->isMobile()) {
                     filtered.push_back(contactC);
                 }
             }
