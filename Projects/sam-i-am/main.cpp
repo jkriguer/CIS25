@@ -52,7 +52,7 @@ int main() {
                 if (!cell) {
                     continue;
                 }
-                if (cell->getMapIcon() == 'P') {
+                if (cell->getMapIcon() == 'B') {
                     playerAlive = true;
                 }
                 if (cell->getMapIcon() == 'C') {
@@ -93,7 +93,7 @@ int main() {
         if (input == 'i') { //identify
             for (Coord contactC : contacts) { //split off unidentified actors
                 auto& contact = game.getCell(contactC);
-                if (contact->isIdentified && contact->isMobile()) {
+                if (!contact->isIdentified && dynamic_cast<SAM::MovingActor*>(contact.get())) {
                     filtered.push_back(contactC);
                 }
             }
@@ -117,7 +117,7 @@ int main() {
             std::cout << "SAM effective range: " << game.RANGE << '\n';
             for (Coord contactC : contacts) { //split off mobiles
                 auto& contact = game.getCell(contactC);
-                if (contact->isMobile()) {
+                if (dynamic_cast<SAM::MovingActor*>(contact.get())) {
                     filtered.push_back(contactC);
                 }
             }
