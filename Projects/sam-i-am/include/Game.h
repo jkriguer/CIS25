@@ -30,7 +30,7 @@ namespace SAM {
 		void moveUnits(const std::vector<Coord>&);
 
 		std::vector<Coord> getUnitList();
-		bool makeAndPlace(ActorType, std::string, char, Coord);
+		bool makeAndPlace(std::string, char, Coord);
 		bool makeAndPlace(Faction, AircraftParams, Bearing, Coord);
 		bool loadScenario(const std::vector<char>&);
 

@@ -15,7 +15,3 @@ char SAM::Actor::getMapIcon() {
 Faction SAM::Actor::getFaction() {
 	return this->faction;
 }
-
-ActorType SAM::Actor::getActorType() {
-	return this->actorType;
-}

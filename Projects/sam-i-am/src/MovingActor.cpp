@@ -5,7 +5,6 @@
 #include <iomanip>
 
 SAM::MovingActor::MovingActor(Faction f, const AircraftParams& ap, Bearing b) {
-	actorType = Mobile;
 	faction = f;
 	label = ap.label;
 	flyingLow = ap.flyingLow;

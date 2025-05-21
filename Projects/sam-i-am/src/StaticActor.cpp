@@ -1,8 +1,7 @@
 #include "../include/StaticActor.h"
 #include "../include/sam_utils.h"
 
-SAM::StaticActor::StaticActor(ActorType at, std::string l, char c) {
-	this->actorType = at;
+SAM::StaticActor::StaticActor(std::string l, char c) {
 	this->label = l;
 	this->mapIcon = c;
 }

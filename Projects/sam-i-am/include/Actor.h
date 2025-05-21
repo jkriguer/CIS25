@@ -10,7 +10,6 @@ namespace SAM {
 		std::string label = "Unnamed";
 		char mapIcon = '?';
 		Faction faction = Neutral;
-		ActorType actorType = City;
 	public:
 		virtual ~Actor() = default;
 		virtual void move(SAM::Game&) = 0;
@@ -23,6 +22,5 @@ namespace SAM {
 		void setCoords(Coord);
 		char getMapIcon();
 		Faction getFaction();
-		ActorType getActorType();
 	};
 }

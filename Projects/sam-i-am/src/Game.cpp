@@ -103,14 +103,14 @@ std::vector<Coord> SAM::Game::getUnitList() {
 	return output;
 }
 
-bool SAM::Game::makeAndPlace(ActorType aT, std::string label, char ch, Coord co) {
+bool SAM::Game::makeAndPlace(std::string label, char ch, Coord co) {
 	if (getCell(co)) { //fail if cell occupied
 		return false;
 	}
-	if (aT == City) {
+	if (ch == 'C') {
 		this->cityCount++;
 	}
-	setCell(co, std::make_unique<StaticActor>(aT, label, ch));
+	setCell(co, std::make_unique<StaticActor>(label, ch));
 	getCell(co)->setCoords(co);
 	return true; //success
 }
@@ -138,12 +138,12 @@ bool SAM::Game::loadScenario(const std::vector<char>& s) {
 	int fixedCount = s[index++]; //number of fixed actors
 	int nextCity = 1; //city label iterator
 	for (int i = 0; i < fixedCount; i++) {
-		ActorType type = ActorType(s[index++]);
+		bool type = s[index++];
 		int x = s[index++];
 		int y = s[index++];
-		std::string label = (type == Player) ? "Battery" : "City " + std::to_string(nextCity++);
-		makeAndPlace(type, label, label[0], { x, y });
-		if (type == Player) {
+		std::string label = type ? "Battery" : "City " + std::to_string(nextCity++);
+		makeAndPlace(label, label[0], { x, y });
+		if (type) {
 			this->playerPos = { x, y };
 		}
 	}

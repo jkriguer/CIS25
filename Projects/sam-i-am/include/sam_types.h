@@ -11,7 +11,6 @@ using Board = std::vector<std::vector<ActorPtr>>;
 
 enum Bearing { North, Northeast, East, Southeast, South, Southwest, West, Northwest };
 enum Faction { Neutral, Enemy, Friendly };
-enum ActorType { Player, Mobile, City };
 enum Status {Running, Lost, Win, Stalemate};
 
 struct AircraftParams {

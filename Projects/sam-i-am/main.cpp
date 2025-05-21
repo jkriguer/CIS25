@@ -52,10 +52,10 @@ int main() {
                 if (!cell) {
                     continue;
                 }
-                if (cell->getActorType() == Player) {
+                if (cell->getMapIcon() == 'P') {
                     playerAlive = true;
                 }
-                if (cell->getActorType() == City) {
+                if (cell->getMapIcon() == 'C') {
                     cityCount++;
                 }
                 if (cell->getFaction() == Enemy) {
