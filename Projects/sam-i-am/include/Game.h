@@ -1,6 +1,7 @@
 #pragma once
 #include "../include/sam_types.h"
-#include "../include/StaticActor.h"
+#include "../include/City.h"
+#include "../include/Battery.h"
 #include "../include/MovingActor.h"
 #include <memory>
 
@@ -13,8 +14,6 @@ namespace SAM {
 		Coord playerPos{ 0, 0 }; //cached SAM position
 		int cityCount = 0; //for tracking destruction
 	public:
-		const int DIM_X = 48; //board width
-		const int DIM_Y = 30; //board height
 		const int RANGE = 16; //missile range
 		Game();
 
@@ -28,8 +27,10 @@ namespace SAM {
 		void moveUnits(const std::vector<Coord>&);
 
 		std::vector<Coord> getUnitList();
-		bool makeAndPlace(std::string, char, Coord);
-		bool makeAndPlace(Faction, AircraftParams, Bearing, Coord);
+		bool placeActor(ActorPtr, Coord);
+		bool makeAndPlaceCity(Coord);
+		bool makeAndPlaceBattery(Coord);
+		bool makeAndPlaceMoving(Faction, AircraftParams, Bearing, Coord);
 		bool loadScenario(const std::vector<char>&);
 
 

@@ -4,15 +4,15 @@
 #include <iostream>
 
 SAM::Game::Game() {
-	board = Board(DIM_Y); //initialize board
+	board = Board(SAM::MAX_Y); //initialize board
 	for (auto& row : board) { //avoid copying unique pointers this way
-		row.resize(DIM_X);
+		row.resize(SAM::MAX_X);
 	}
 	status = Running; //start game
 }
 
 bool SAM::Game::inBounds(Coord c) {
-	return c.x >= 0 && c.x < DIM_X && c.y >= 0 && c.y < DIM_Y;
+	return c.x >= 0 && c.x < SAM::MAX_X && c.y >= 0 && c.y < SAM::MAX_Y;
 }
 
 std::vector<std::string> SAM::Game::drawBoard() {
@@ -56,7 +56,7 @@ void SAM::Game::setCell(Coord c, ActorPtr a) {
 void SAM::Game::moveAllUnits(const std::vector<Coord>& units) {
 	std::vector<Coord> enemy, friendly, neutral;
 	for (const Coord& c : units) { //sort units by faction
-		if (getCell(c)->isMobile()) {
+		if (dynamic_cast<MovingActor*>(getCell(c).get())) {
 			switch (getCell(c)->getFaction()) {
 				case Enemy:
 					enemy.push_back(c);
@@ -84,7 +84,7 @@ void SAM::Game::moveUnits(const std::vector<Coord>& units) {
 std::vector<std::string> SAM::Game::listContacts(const std::vector<Coord>& units) {
 	std::vector<std::string> output{ "  Name       BRG RNG ALT SPD" };
 	for (const Coord& c : units) {
-		if (getCell(c)->isMobile()) {
+		if (dynamic_cast<MovingActor*>(getCell(c).get())) {
 			output.push_back(getCell(c)->toString(this->playerPos, true));
 		}
 	}
@@ -93,8 +93,8 @@ std::vector<std::string> SAM::Game::listContacts(const std::vector<Coord>& units
 
 std::vector<Coord> SAM::Game::getUnitList() {
 	std::vector<Coord> output;
-	for (int i = 0; i < DIM_X; i++) {
-		for (int j = 0; j < DIM_Y; j++) {
+	for (int i = 0; i < SAM::MAX_X; i++) {
+		for (int j = 0; j < SAM::MAX_Y; j++) {
 			if (getCell({ i, j })) {
 				output.push_back({ i, j });
 			}
@@ -103,25 +103,36 @@ std::vector<Coord> SAM::Game::getUnitList() {
 	return output;
 }
 
-bool SAM::Game::makeAndPlace(std::string label, char ch, Coord co) {
-	if (getCell(co)) { //fail if cell occupied
+bool SAM::Game::placeActor(ActorPtr a, Coord c) {
+	if (getCell(c)) { //fail if cell occupied
 		return false;
 	}
-	if (ch == 'C') {
-		this->cityCount++;
+	if (dynamic_cast<City*>(a.get())) {
+		cityCount++;
 	}
-	setCell(co, std::make_unique<StaticActor>(label, ch));
-	getCell(co)->setCoords(co);
+	if (dynamic_cast<Battery*>(a.get())) {
+		playerPos = c;
+	}
+	setCell(c, std::move(a));
+	getCell(c)->setCoords(c);
 	return true; //success
 }
 
-bool SAM::Game::makeAndPlace(Faction f, AircraftParams role, Bearing b, Coord co) {
-	if (getCell(co)) { //fail if cell occupied
-		return false;
-	}
-	setCell(co, std::make_unique<MovingActor>(f, role, b));
-	getCell(co)->setCoords(co);
-	return true; //success
+bool SAM::Game::makeAndPlaceCity(Coord c) {
+	static int count = 0;
+	auto city = std::make_unique<City>();
+	//modify city label if desired
+	return placeActor(std::move(city), c);
+}
+
+bool SAM::Game::makeAndPlaceBattery(Coord c) {
+	return placeActor(std::make_unique<Battery>(), c);
+}
+
+bool SAM::Game::makeAndPlaceMoving(Faction f, AircraftParams role, Bearing b, Coord c) {
+	static int count = 0;
+	auto moving = std::make_unique<MovingActor>(f, role, b);
+	return placeActor(std::move(moving), c);
 }
 
 Status SAM::Game::getStatus() {
@@ -136,18 +147,23 @@ bool SAM::Game::loadScenario(const std::vector<char>& s) {
 	int index = 0; //read head
 	index++; //skip validator
 	int fixedCount = s[index++]; //number of fixed actors
-	int nextCity = 1; //city label iterator
+	int batteryCount = 0;
+	int cityCount = 0;
 	for (int i = 0; i < fixedCount; i++) {
-		bool type = s[index++];
+		bool isCity = s[index++];
 		int x = s[index++];
 		int y = s[index++];
-		std::string label = type ? "Battery" : "City " + std::to_string(nextCity++);
-		makeAndPlace(label, label[0], { x, y });
-		if (type) {
+		if (isCity) {
+			makeAndPlaceCity({ x, y });
+			cityCount++;
+		}
+		else {
+			makeAndPlaceBattery({ x, y });
 			this->playerPos = { x, y };
+			batteryCount++;
 		}
 	}
-	if (nextCity == 1 || nextCity > fixedCount) { //if all fixed actors are cities or none of them are
+	if (cityCount < 1 || batteryCount != 1) { //if all fixed actors are cities or none of them are
 		throw std::runtime_error("Illegal scenario: player or cities not placed");
 	}
 	int mobileCount = s[index++];
@@ -157,7 +173,7 @@ bool SAM::Game::loadScenario(const std::vector<char>& s) {
 		Bearing b = (Bearing)s[index++];
 		int x = s[index++];
 		int y = s[index++];
-		makeAndPlace(f, getArchetype(f, archetype), b, { x, y });
+		makeAndPlaceMoving(f, getArchetype(f, archetype), b, { x, y });
 	}
 	return true;
 }
