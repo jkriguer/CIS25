@@ -12,7 +12,6 @@ namespace SAM {
 	public:
 		MovingActor(Faction, const AircraftParams&, Bearing);
 		void move(SAM::Game&) override;
-		bool isMobile() const override;
 		std::string toString(Coord, bool) const override;
 	};
 }

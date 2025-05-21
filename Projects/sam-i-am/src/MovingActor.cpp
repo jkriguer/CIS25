@@ -12,8 +12,10 @@ SAM::MovingActor::MovingActor(Faction f, const AircraftParams& ap, Bearing b) {
 	bearing = b;
 	attacks = ap.attacks;
 	isIdentified = (f == Friendly);
-}
 
+	static int count = 0;
+	mapIcon = '0' + (count++) % 10;
+}
 
 void SAM::MovingActor::move(SAM::Game& g) {
 	Coord step = position;
@@ -29,10 +31,6 @@ void SAM::MovingActor::move(SAM::Game& g) {
 	g.setCell(step, std::move(g.getCell(position))); //actually move
 	g.getCell(position).reset(); //erase last location
 	setCoords(step);
-}
-
-bool SAM::MovingActor::isMobile() const {
-	return true;
 }
 
 std::string SAM::MovingActor::toString(Coord c, bool printBRAS) const {
